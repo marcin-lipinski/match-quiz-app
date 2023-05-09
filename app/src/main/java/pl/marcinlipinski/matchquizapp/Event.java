@@ -1,21 +1,21 @@
 package pl.marcinlipinski.matchquizapp;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
+@Getter
+@AllArgsConstructor
+@SuperBuilder
 public class Event {
     private Long id;
-    private String status;
     private String homeTeam;
     private String homeTeamLogo;
     private String awayTeam;
     private String awayTeamLogo;
-    private LocalDateTime startTime;
+    private LocalDate startTime;
     private int homeTeamScore;
     private int awayTeamScore;
-    private int winnerCode;
-    private double homeTeamOdd;
-    private double drawTeamOdd;
-    private Double awayTeamOdd;
-    private String leagueName;
-    private String leagueLogo;
 }

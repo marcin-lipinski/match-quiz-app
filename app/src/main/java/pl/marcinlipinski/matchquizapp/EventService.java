@@ -1,118 +1,94 @@
 package pl.marcinlipinski.matchquizapp;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import androidx.annotation.Nullable;
+import android.util.Log;
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 
-public class EventService extends SQLiteOpenHelper {
-    private static final String ID = "ID";
-    private static final String NAME = "NAME";
-    private static final String LOGO = "LOGO";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private List<Event> listOfEvents;
+public class EventService implements Service<Event>{
+    private final DatabaseContext databaseContext;
+    public EventService(DatabaseContext databaseContext){
+        this.databaseContext = databaseContext;
+    }
 
-    public EventService(@Nullable Context context) {
-        super(context, "matchquizdb", null, 1);
+    public void initialize(){
+        databaseContext.createTable("CREATE TABLE EVENT_TABLE (ID INTEGER PRIMARY KEY, " +
+                                            "HOME_TEAM TEXT, AWAY_TEAM TEXT, HOME_TEAM_LOGO TEXT, AWAY_TEAM_LOGO TEXT, " +
+                                            "HOME_TEAM_SCORE TEXT, AWAY_TEAM_SCORE TEXT, START_TIME TEXT)");
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableStatement = "CREATE TABLE LEAGUE_TABLE (" + ID + " INTEGER PRIMARY KEY, " + NAME + " TEXT, " + LOGO + " TEXT)";
-
-        sqLiteDatabase.execSQL(createTableStatement);
-
+    public ContentValues newContent(Event event) {
+        ContentValues cv = new ContentValues();
+        cv.put("ID", event.getId());
+        cv.put("HOME_TEAM", event.getHomeTeam());
+        cv.put("AWAY_TEAM", event.getAwayTeam());
+        cv.put("HOME_TEAM_LOGO", event.getHomeTeamLogo());
+        cv.put("AWAY_TEAM_LOGO", event.getAwayTeamLogo());
+        cv.put("HOME_TEAM_SCORE", event.getAwayTeamScore());
+        cv.put("AWAY_TEAM_SCORE", event.getAwayTeamScore());
+        cv.put("START_TIME", event.getStartTime().toString());
+        return cv;
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    public void getEventsBySeasonId(Long seasonId, Context context, final VolleyCallback volleyCallback){
+        String url = "https://sportscore1.p.rapidapi.com/seasons/" + seasonId + "/events";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+                response -> {
+                    try {
+                        JSONArray json = response.getJSONArray("data");
+                        HashMap<Long, Event> matches = new HashMap<>();
+                        for(int i = 0 ; i < json.length(); i++){
+                            JSONObject data = json.getJSONObject(i);
+                            if(!data.getString("status").equals("finished")) continue;
+                            Event event = Event.builder()
+                                            .id(data.getLong("id"))
+                                            .homeTeam(data.getJSONObject("home_team").getString("name_full"))
+                                            .awayTeam(data.getJSONObject("away_team").getString("name_full"))
+                                            .homeTeamLogo(data.getJSONObject("home_team").getString("logo"))
+                                            .awayTeamLogo(data.getJSONObject("away_team").getString("logo"))
+                                            .homeTeamScore(data.getJSONObject("home_score").getInt("normal_time"))
+                                            .awayTeamScore(data.getJSONObject("away_score").getInt("normal_time"))
+                                            .startTime(LocalDate.parse(data.getString("start_at"), formatter)).build();
+
+                            matches.put(data.getLong("id"), event);
+                        }
+                        volleyCallback.onSuccess(matches);
+                    } catch (JSONException e) {
+                        Log.d("ERROR",e.getMessage());
+                        volleyCallback.onFail();
+                    }
+                },
+                error -> {
+                    volleyCallback.onFail();
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<>();
+                params.put("X-RapidAPI-Key", "bef5e777cemsh913f1631d392ffcp18bd9ejsn8198ee1dbb09");
+                params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsonObjectRequest);
     }
-
-//    public List<Event> searchByLeagueId(int leagueId){
-//        listOfEvents.clear();
-//
-//        String url = "https://sportscore1.p.rapidapi.com/events/search?sport_id=1&date_end=" + nextWeek + "&date_start=" + today + "&league_id=" + leagueId;
-//        var response = Unirest.post(url)
-//                .header("X-RapidAPI-Key", "bef5e777cemsh913f1631d392ffcp18bd9ejsn8198ee1dbb09")
-//                .header("X-RapidAPI-Host", "sportscore1.p.rapidapi.com").asJson().body();
-//
-//        var jsonArray = responseToDataArray(response);
-//        for(int i = 0 ; i < jsonArray.length(); i++){
-//            listOfMatches.add(parseJSON(jsonArray.getJSONObject(i)));
-//        }
-//
-//        return listOfMatches;
-//    }
-//
-//    private JSONArray responseToDataArray(Json response){
-//        try {
-//            return new JSONObject(response).getJSONArray("array").getJSONObject(0).getJSONArray("data");
-//        }
-//        catch(Exception ex){
-//            System.out.println("API access expired.");
-//            return new JSONArray();
-//        }
-//    }
-//    private JSONObject responseToDataObject(Json response){
-//        try {
-//            return new JSONObject(response).getJSONArray("array").getJSONObject(0).getJSONObject("data");
-//        }
-//        catch(Exception ex){
-//            System.out.println("API access expired.");
-//            return new JSONObject();
-//        }
-//    }
-//
-//    public void deleteAll() {
-//        matchRepository.deleteAll();
-//    }
-//
-//    public void getRefreshedMatchByBetId(Match match) {
-//        var response = Unirest.get("https://sportscore1.p.rapidapi.com/events/" + match.getId())
-//                .header("content-type", "application/octet-stream")
-//                .header("X-RapidAPI-Key", "bef5e777cemsh913f1631d392ffcp18bd9ejsn8198ee1dbb09")
-//                .header("X-RapidAPI-Host", "sportscore1.p.rapidapi.com")
-//                .asJson().body();
-//
-//        var jsonArray = responseToDataObject(response);
-//        var refreshedMatch = parseJSON(jsonArray);
-//        matchRepository.save(refreshedMatch);
-//    }
-//
-//    private Match parseJSON(JSONObject json){
-//        var match = Match.builder()
-//                .id(json.getLong("id"))
-//                .status(json.getString("status"))
-//                .homeTeam(json.getJSONObject("home_team").getString("name"))
-//                .awayTeam(json.getJSONObject("away_team").getString("name"))
-//                .homeTeamLogo(json.getJSONObject("home_team").getString("logo"))
-//                .awayTeamLogo(json.getJSONObject("away_team").getString("logo"))
-//                .startTime(LocalDateTime.parse(json.getString("start_at"), formatter))
-//                .homeTeamScore(0)
-//                .awayTeamScore(0)
-//                .winnerCode(json.getInt("winner_code"))
-//                .homeTeamOdd(1.00)
-//                .drawTeamOdd(1.00)
-//                .awayTeamOdd(1.00)
-//                .leagueName(json.getJSONObject("league").getString("name"))
-//                .leagueName(json.getJSONObject("league").getString("logo"))
-//                .bets(new HashSet<>()).build();
-//
-//        if(!json.isNull("main_odds")){
-//            match.setHomeTeamOdd(json.getJSONObject("main_odds").getJSONObject("outcome_1").getDouble("value"));
-//            match.setAwayTeamOdd(json.getJSONObject("main_odds").getJSONObject("outcome_2").getDouble("value"));
-//            match.setDrawTeamOdd(json.getJSONObject("main_odds").getJSONObject("outcome_X").getDouble("value"));
-//        }
-//        if(json.getString("status").equals("finished")){
-//            match.setHomeTeamScore(json.getJSONObject("home_score").getInt("normal_time"));
-//            match.setAwayTeamScore(json.getJSONObject("home_score").getInt("normal_time"));
-//        }
-//
-//        return match;
-//    }
 }
