@@ -24,29 +24,29 @@ public class LeaguesService implements Service<League>{
         this.databaseContext = databaseContext;
     }
 
+    @Override
     public void initialize(){
         File file = new File("//data//data//pl.marcinlipinski.matchquizapp//databases//matchquizdb");
         if(file.exists()) return;
 
         databaseContext.createTable("CREATE TABLE LEAGUE_TABLE (ID INTEGER PRIMARY KEY, NAME TEXT, LOGO TEXT)");
-        saveOne(new League(191L, "Ekstraklasa", "https://tipsscore.com/resb/league/poland-ekstraklasa.png"));
-        saveOne(new League(251L,"LaLiga","https://tipsscore.com/resb/league/spain-laliga.png"));
-        saveOne(new League(317L, "Premier League","https://tipsscore.com/resb/league/england-premier-league.png"));
-        saveOne(new League(498L, "Ligue 1", "https://tipsscore.com/resb/league/france-ligue-1.png"));
-        saveOne(new League(512L, "Bundesliga", "https://tipsscore.com/resb/league/germany-bundesliga.png"));
-        saveOne(new League(592L,"Serie A", "https://tipsscore.com/resb/league/italy-serie-a.png"));
-        saveOne(new League(817L,"UEFA Champions League", "https://tipsscore.com/resb/league/europe-uefa-champions-league.png"));
-        saveOne(new League(818L,"UEFA Europa League", "https://tipsscore.com/resb/league/europe-uefa-europa-league.png"));
-        saveOne(new League(8911L, "UEFA Europa Conference League", "https://tipsscore.com/resb/league/europe-uefa-europa-conference-league.png"));
+        save(new League(191L, "Ekstraklasa", "https://tipsscore.com/resb/league/poland-ekstraklasa.png"));
+        save(new League(251L,"LaLiga","https://tipsscore.com/resb/league/spain-laliga.png"));
+        save(new League(317L, "Premier League","https://tipsscore.com/resb/league/england-premier-league.png"));
+        save(new League(498L, "Ligue 1", "https://tipsscore.com/resb/league/france-ligue-1.png"));
+        save(new League(512L, "Bundesliga", "https://tipsscore.com/resb/league/germany-bundesliga.png"));
+        save(new League(592L,"Serie A", "https://tipsscore.com/resb/league/italy-serie-a.png"));
+        save(new League(817L,"UEFA Champions League", "https://tipsscore.com/resb/league/europe-uefa-champions-league.png"));
+        save(new League(818L,"UEFA Europa League", "https://tipsscore.com/resb/league/europe-uefa-europa-league.png"));
+        save(new League(8911L, "UEFA Europa Conference League", "https://tipsscore.com/resb/league/europe-uefa-europa-conference-league.png"));
     }
 
-    public void saveOne(League league){
-        SQLiteDatabase db = databaseContext.getWritableDatabase();
-        db.insert("LEAGUE_TABLE", null, newContent(league));
+    public void save(League league){
+        databaseContext.save("LEAGUE_TABLE", newContent(league));
     }
 
     public List<League> getAll(){
-        SQLiteDatabase db = databaseContext.getReadableDatabase();
+        SQLiteDatabase db = databaseContext.read();
         Cursor cursor = db.rawQuery("SELECT * FROM LEAGUE_TABLE", null);
         List<League> leagues = new ArrayList<>();
         if(cursor.moveToFirst()){

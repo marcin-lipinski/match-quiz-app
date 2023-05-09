@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class EventService implements Service<Event>{
     }
 
     public void initialize(){
-        databaseContext.createTable("CREATE TABLE EVENT_TABLE (ID INTEGER PRIMARY KEY, " +
+        databaseContext.createTable("CREATE TABLE if not exists EVENT_TABLE (ID INTEGER PRIMARY KEY, " +
                                             "HOME_TEAM TEXT, AWAY_TEAM TEXT, HOME_TEAM_LOGO TEXT, AWAY_TEAM_LOGO TEXT, " +
                                             "HOME_TEAM_SCORE TEXT, AWAY_TEAM_SCORE TEXT, START_TIME TEXT)");
     }

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,9 +14,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseContext databaseContext = new DatabaseContext(MainActivity.this);
+        SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(MainActivity.this);
         LeaguesService leaguesService = new LeaguesService(databaseContext);
         EventService eventService = new EventService(databaseContext);
+        ApproachService approachService = new ApproachService(databaseContext);
 
         TextView view = (TextView) findViewById(R.id.text2);
         final String[] r = {""};
