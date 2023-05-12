@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,10 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 import lombok.Getter;
+import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 
 @Getter
 
-public class SQLiteDatabaseContext extends SQLiteOpenHelper implements DatabaseContext{
+public class SQLiteDatabaseContext extends SQLiteOpenHelper implements DatabaseContext {
     public SQLiteDatabaseContext(@Nullable Context context) {
         super(context, "matchquizdb", null, 1);
     }

@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

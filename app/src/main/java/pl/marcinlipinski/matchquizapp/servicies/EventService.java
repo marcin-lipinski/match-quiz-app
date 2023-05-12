@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,17 +6,21 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
+import pl.marcinlipinski.matchquizapp.models.Event;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EventService implements Service<Event>{
+public class EventService implements Service<Event> {
     private final DatabaseContext databaseContext;
     public EventService(DatabaseContext databaseContext){
         this.databaseContext = databaseContext;
@@ -43,7 +47,7 @@ public class EventService implements Service<Event>{
     }
 
 
-    public void getEventsBySeasonId(Long seasonId, Context context, final VolleyCallback volleyCallback){
+    public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback volleyCallback){
         String url = "https://sportscore1.p.rapidapi.com/seasons/" + seasonId + "/events";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -51,23 +55,27 @@ public class EventService implements Service<Event>{
                 response -> {
                     try {
                         JSONArray json = response.getJSONArray("data");
-                        HashMap<Long, Event> matches = new HashMap<>();
+                        ArrayList<Event> events = new ArrayList<>();
                         for(int i = 0 ; i < json.length(); i++){
                             JSONObject data = json.getJSONObject(i);
                             if(!data.getString("status").equals("finished")) continue;
                             Event event = Event.builder()
                                             .id(data.getLong("id"))
+                                            .homeTeamId(data.getJSONObject("home_team").getLong("id"))
+                                            .awayTeamId(data.getJSONObject("away_team").getLong("id"))
                                             .homeTeam(data.getJSONObject("home_team").getString("name_full"))
                                             .awayTeam(data.getJSONObject("away_team").getString("name_full"))
                                             .homeTeamLogo(data.getJSONObject("home_team").getString("logo"))
                                             .awayTeamLogo(data.getJSONObject("away_team").getString("logo"))
                                             .homeTeamScore(data.getJSONObject("home_score").getInt("normal_time"))
                                             .awayTeamScore(data.getJSONObject("away_score").getInt("normal_time"))
+                                            .winnerCode(data.getInt("winner_code"))
                                             .startTime(LocalDate.parse(data.getString("start_at"), formatter)).build();
 
-                            matches.put(data.getLong("id"), event);
+                            events.add(event);
                         }
-                        volleyCallback.onSuccess(matches);
+
+                        volleyCallback.onSuccess(events);
                     } catch (JSONException e) {
                         Log.d("ERROR",e.getMessage());
                         volleyCallback.onFail();
@@ -80,7 +88,40 @@ public class EventService implements Service<Event>{
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "bef5e777cemsh913f1631d392ffcp18bd9ejsn8198ee1dbb09");
+                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
+                params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
+
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsonObjectRequest);
+    }
+
+    public void getCityDistanceByWinnerTeamId(Long teamId, Context context, VolleyCallback volleyCallback){
+        String url = "https://sportscore1.p.rapidapi.com/teams/" + teamId;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
+                response -> {
+                    try {
+                        JSONObject data = response.getJSONObject("data");
+                        String city = data.getJSONObject("venue").getJSONObject("city").getString("en");
+
+                        volleyCallback.onSuccess(city);
+                    } catch (JSONException e) {
+                        Log.d("ERROR",e.getMessage());
+                        volleyCallback.onFail();
+                    }
+                },
+                error -> {
+                    volleyCallback.onFail();
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<>();
+                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
                 return params;

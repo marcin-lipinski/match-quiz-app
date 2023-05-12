@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.servicies;
 import android.content.ContentValues;
 
 public interface Service<T> {

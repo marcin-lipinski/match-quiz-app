@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;

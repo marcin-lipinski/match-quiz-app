@@ -1,8 +1,10 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
+import pl.marcinlipinski.matchquizapp.database.SQLiteDatabaseContext;
+import pl.marcinlipinski.matchquizapp.models.Approach;
 
-public class ApproachService implements Service<Approach>{
+public class ApproachService implements Service<Approach> {
     private final SQLiteDatabaseContext databaseContext;
     public ApproachService(SQLiteDatabaseContext databaseContext){
         this.databaseContext = databaseContext;

@@ -1,16 +1,18 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
+import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
+import pl.marcinlipinski.matchquizapp.models.League;
+import pl.marcinlipinski.matchquizapp.models.Season;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LeaguesService implements Service<League>{
+public class LeaguesService implements Service<League> {
     private final DatabaseContext databaseContext;
     public LeaguesService(DatabaseContext databaseContext){
         this.databaseContext = databaseContext;
@@ -45,10 +47,10 @@ public class LeaguesService implements Service<League>{
         databaseContext.save("LEAGUE_TABLE", newContent(league));
     }
 
-    public List<League> getAll(){
+    public ArrayList<League> getAll(){
         SQLiteDatabase db = databaseContext.read();
         Cursor cursor = db.rawQuery("SELECT * FROM LEAGUE_TABLE", null);
-        List<League> leagues = new ArrayList<>();
+        ArrayList<League> leagues = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
                 leagues.add(new League(
@@ -68,11 +70,12 @@ public class LeaguesService implements Service<League>{
                 response -> {
                     try {
                         JSONArray json = response.getJSONArray("data");
-                        HashMap<Long, String> seasons = new HashMap<>();
+                        ArrayList<Season> seasons = new ArrayList<>();
                         for(int i = 0 ; i < json.length(); i++){
                             Long id = json.getJSONObject(i).getLong("id");
                             String name = json.getJSONObject(i).getString("name");
-                            seasons.put(id, name);
+                            Season season = Season.builder().name(name).id(id).build();
+                            seasons.add(season);
                         }
                         volleyCallback.onSuccess(seasons);
                     } catch (JSONException e) {
@@ -84,9 +87,9 @@ public class LeaguesService implements Service<League>{
                 }
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "bef5e777cemsh913f1631d392ffcp18bd9ejsn8198ee1dbb09");
+                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
                 return params;
