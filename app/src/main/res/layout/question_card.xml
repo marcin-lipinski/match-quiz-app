@@ -2,22 +2,81 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/purple_200">
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/home_team_logo"/>
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/home_team_logo"
+            android:translationY="300dp"
+            android:layout_marginStart="20dp"/>
     <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/away_team_logo"
+            android:translationY="300dp"
+            android:layout_marginRight="20dp"/>
+    <TextView
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/away_team_logo"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/home_team_name"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/away_team_name"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/match_date"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/winner_city_distance"/>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/score_one_button" android:text="score 1"/>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/score_two_button"/>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/score_three_button"/>
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="20dp"
+            android:translationY="240dp"
+            android:textAlignment="center"
+            android:id="@+id/home_team_name"
+            android:contentDescription="logo of home team"/>
+    <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:translationY="240dp"
+            android:textAlignment="center"
+            android:id="@+id/away_team_name"
+            android:contentDescription="logo of home team"/>
+    <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:translationY="150dp"
+            android:textAlignment="center"
+            android:id="@+id/match_date"/>
+    <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:translationY="190dp"
+            android:textAlignment="center"
+            android:id="@+id/winner_city_distance"/>
+    <Button android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/score_one_button"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="20dp"
+            android:translationY="500dp"
+            android:text="edlo"/>
+    <Button android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/score_two_button"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:translationY="500dp"
+            android:text="edlo"/>/>
+    <Button android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/score_three_button"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="20dp"
+            android:translationY="550dp"
+            android:text="edlo"/>/>
+    <Button android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/score_four_button"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:translationY="550dp"
+            android:text="edlo"/>/>
 
 </RelativeLayout>

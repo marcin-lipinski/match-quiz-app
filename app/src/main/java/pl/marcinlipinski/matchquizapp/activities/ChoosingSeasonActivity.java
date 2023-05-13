@@ -52,8 +52,8 @@ public class ChoosingSeasonActivity extends Activity implements RecyclerViewInte
                 }
             }
             @Override
-            public void onFail() {
-
+            public void onFail(String message) {
+                Log.d("Season by Id", message);
             }
         });
     }

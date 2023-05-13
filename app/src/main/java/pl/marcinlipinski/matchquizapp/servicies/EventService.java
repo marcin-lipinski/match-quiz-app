@@ -2,11 +2,9 @@ package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,12 +75,11 @@ public class EventService implements Service<Event> {
 
                         volleyCallback.onSuccess(events);
                     } catch (JSONException e) {
-                        Log.d("ERROR",e.getMessage());
-                        volleyCallback.onFail();
+                        volleyCallback.onFail(e.getMessage());
                     }
                 },
                 error -> {
-                    volleyCallback.onFail();
+                    volleyCallback.onFail(error.getMessage());
                 }
         ) {
             @Override
@@ -110,12 +107,11 @@ public class EventService implements Service<Event> {
 
                         volleyCallback.onSuccess(city);
                     } catch (JSONException e) {
-                        Log.d("ERROR",e.getMessage());
-                        volleyCallback.onFail();
+                        volleyCallback.onFail(e.getMessage());
                     }
                 },
                 error -> {
-                    volleyCallback.onFail();
+                    volleyCallback.onFail(error.getMessage());
                 }
         ) {
             @Override

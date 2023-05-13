@@ -79,11 +79,11 @@ public class LeaguesService implements Service<League> {
                         }
                         volleyCallback.onSuccess(seasons);
                     } catch (JSONException e) {
-                        volleyCallback.onFail();
+                        volleyCallback.onFail(e.getMessage());
                     }
                 },
                 error -> {
-                    Log.d("ERROR","error => "+error.toString());
+                    volleyCallback.onFail(error.getMessage());
                 }
         ) {
             @Override

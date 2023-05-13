@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface VolleyCallback<T> {
     void onSuccess(T result);
-    void onFail();
+    void onFail(String message);
 }
