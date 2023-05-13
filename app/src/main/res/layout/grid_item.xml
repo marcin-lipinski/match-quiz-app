@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-    <RelativeLayout
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#212A3E"
+        android:background="#212A3E" android:outlineSpotShadowColor="#00FFFFFF"
+        android:outlineAmbientShadowColor="#00FFFFFF">
+
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
-        <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:id="@+id/grid_image"
-                android:layout_centerInParent="true"/>
+            android:layout_margin="10dp"
+            app:cardCornerRadius="40sp"
+            app:cardElevation="20sp"
+            app:cardBackgroundColor="#BDCDD6"
+            android:background="#BDCDD6" android:outlineAmbientShadowColor="#00FFFFFF"
+            android:outlineSpotShadowColor="#00FFFFFF">
 
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/item_name"
-                  android:textSize="20sp"
-                  android:layout_marginTop="150dp"
-                  android:padding="2dp"
-                  android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="#BDCDD6"
+                android:elevation="20sp"
+                android:backgroundTint="#BDCDD6"
+                android:outlineSpotShadowColor="#00FFFFFF"
+                android:outlineAmbientShadowColor="#00FFFFFF">
+            <ImageView
+                    android:layout_height="120dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/grid_image"
+                    android:layout_centerHorizontal="true" android:layout_width="120dp"
+                    android:outlineSpotShadowColor="#000000" android:outlineAmbientShadowColor="#000000"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="80dp"
+                      android:id="@+id/item_name"
+                      android:textSize="20sp"
+                      android:layout_marginTop="150dp"
+                      android:padding="2dp"
+                      android:layout_centerHorizontal="true"
+                      android:fontFamily="@font/asul_bold"
+            />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.cardview.widget.CardView>

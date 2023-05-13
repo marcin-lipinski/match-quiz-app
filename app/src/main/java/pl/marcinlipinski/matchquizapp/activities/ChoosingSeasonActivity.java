@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
@@ -29,10 +28,6 @@ public class ChoosingSeasonActivity extends Activity implements RecyclerViewInte
 
         SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(this);
         LeaguesService leaguesService = new LeaguesService(databaseContext);
-
-
-        TextView v = (TextView)findViewById(R.id.text22);
-        v.setText(name);
 
         leaguesService.getSeasonsByLeagueId(id, this, new VolleyCallback<ArrayList<Season>>() {
             @Override

@@ -72,7 +72,6 @@ public class EventService implements Service<Event> {
 
                             events.add(event);
                         }
-
                         volleyCallback.onSuccess(events);
                     } catch (JSONException e) {
                         volleyCallback.onFail(e.getMessage());

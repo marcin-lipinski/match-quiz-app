@@ -4,10 +4,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.MainActivity">
+        tools:context=".activities.MainActivity"
+        android:background="#212A3E">
     <GridView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/leaguesGridView"
-            android:numColumns="2"/>
+            android:numColumns="2"
+            android:background="#212A3E"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
