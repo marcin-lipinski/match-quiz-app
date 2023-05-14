@@ -8,6 +8,7 @@ import android.location.*;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import org.jetbrains.annotations.NotNull;
 import pl.marcinlipinski.matchquizapp.LeagueGridViewAdapter;
 import pl.marcinlipinski.matchquizapp.R;
@@ -36,30 +39,51 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
+    BottomNavigationView bottomNavigationView;
+    PlayFragment playFragment = new PlayFragment();
+    HistoryFragment historyFragment = new HistoryFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(MainActivity.this);
-        LeaguesService leaguesService = new LeaguesService(databaseContext);
-        leaguesService.initialize();
-        EventService eventService = new EventService(databaseContext);
-        ApproachService approachService = new ApproachService(databaseContext);
-        eventService.initialize();
+        bottomNavigationView = findViewById(R.id.navigation_bar);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, playFragment).commit();
 
-
-        ArrayList<League> leagues = leaguesService.getAll();
-
-        GridView gridView;
-        gridView = findViewById(R.id.leaguesGridView);
-        gridView.setAdapter(new LeagueGridViewAdapter(this, leagues));
-
-        gridView.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent myIntent = new Intent(this, ChoosingSeasonActivity.class);
-            myIntent.putExtra("leagueName", leagues.get(i).getName());
-            myIntent.putExtra("leagueId", leagues.get(i).getId());
-            startActivity(myIntent);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.play:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, playFragment).commit();
+                    return true;
+                case R.id.played:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, historyFragment).commit();
+                    return true;
+            }
+            return true;
         });
+
+
+
+
+//        SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(MainActivity.this);
+//        LeaguesService leaguesService = new LeaguesService(databaseContext);
+//        leaguesService.initialize();
+//        EventService eventService = new EventService(databaseContext);
+//        ApproachService approachService = new ApproachService(databaseContext);
+//        eventService.initialize();
+//
+//
+//        ArrayList<League> leagues = leaguesService.getAll();
+//
+//        GridView gridView;
+//        gridView = findViewById(R.id.leaguesGridView);
+//        gridView.setAdapter(new LeagueGridViewAdapter(this, leagues));
+//
+//        gridView.setOnItemClickListener((adapterView, view, i, l) -> {
+//            Intent myIntent = new Intent(this, ChoosingSeasonActivity.class);
+//            myIntent.putExtra("leagueName", leagues.get(i).getName());
+//            myIntent.putExtra("leagueId", leagues.get(i).getId());
+//            startActivity(myIntent);
+//        });
     }
 }
