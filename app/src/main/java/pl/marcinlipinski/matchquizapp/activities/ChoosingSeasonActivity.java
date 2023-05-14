@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
@@ -29,28 +30,41 @@ public class ChoosingSeasonActivity extends Activity implements RecyclerViewInte
         SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(this);
         LeaguesService leaguesService = new LeaguesService(databaseContext);
 
-        leaguesService.getSeasonsByLeagueId(id, this, new VolleyCallback<ArrayList<Season>>() {
-            @Override
-            public void onSuccess(ArrayList<Season> seasons) {
-                List<Long> ids = new ArrayList<>();
-                List<String> names = new ArrayList<>();
-                for(Season season : seasons){
-                    Log.d(season.getName(), String.valueOf(season.getId()));
+        ((TextView)findViewById(R.id.league_name)).setText(name);
+        List<Long> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        names.add("sezon 22/23");
+        names.add("sezon 21/22");
+        names.add("sezon 20/21");
+        ids.add(1L);
+        ids.add(2L);
+        ids.add(3L);
+        RecyclerView recyclerView = findViewById(R.id.seasons_recycleview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ChoosingSeasonActivity.this));
+        recyclerView.setAdapter(new SeasonsRecycleViewAdapter(getApplicationContext(), names, ids, ChoosingSeasonActivity.this));
 
-                    ids.add(season.getId());
-                    names.add(season.getName());
-
-                    RecyclerView recyclerView = findViewById(R.id.seasons_recycleview);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(ChoosingSeasonActivity.this));
-                    recyclerView.setAdapter(new SeasonsRecycleViewAdapter(getApplicationContext(), names, ids, ChoosingSeasonActivity.this));
-
-                }
-            }
-            @Override
-            public void onFail(String message) {
-                Log.d("Season by Id", message);
-            }
-        });
+//        leaguesService.getSeasonsByLeagueId(id, this, new VolleyCallback<ArrayList<Season>>() {
+//            @Override
+//            public void onSuccess(ArrayList<Season> seasons) {
+//                List<Long> ids = new ArrayList<>();
+//                List<String> names = new ArrayList<>();
+//                for(Season season : seasons){
+//                    Log.d(season.getName(), String.valueOf(season.getId()));
+//
+//                    ids.add(season.getId());
+//                    names.add(season.getName());
+//
+//                    RecyclerView recyclerView = findViewById(R.id.seasons_recycleview);
+//                    recyclerView.setLayoutManager(new LinearLayoutManager(ChoosingSeasonActivity.this));
+//                    recyclerView.setAdapter(new SeasonsRecycleViewAdapter(getApplicationContext(), names, ids, ChoosingSeasonActivity.this));
+//
+//                }
+//            }
+//            @Override
+//            public void onFail(String message) {
+//                Log.d("Season by Id", message);
+//            }
+//        });
     }
 
     @Override

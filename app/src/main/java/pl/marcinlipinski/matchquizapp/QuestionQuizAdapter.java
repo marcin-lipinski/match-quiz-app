@@ -139,8 +139,8 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
         holder.winnerCityDistanceTextView.setText("-----");
         Picasso.with(context).load(event.getHomeTeamLogo()).fit().into(holder.homeTeamLogo);
         Picasso.with(context).load(event.getAwayTeamLogo()).fit().into(holder.awayTeamLogo);
-        if(event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
-        else if(event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
+        //if(event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
+        //else if(event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
 
         holder.homeTeamTextView.setText(event.getHomeTeam());
         holder.awayTeamTextView.setText(event.getAwayTeam());

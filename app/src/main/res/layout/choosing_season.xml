@@ -4,16 +4,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".activities.ChoosingSeasonActivity">
+        tools:context=".activities.ChoosingSeasonActivity"
+        android:background="#212A3E"
+        android:backgroundTint="#212A3E"
+        android:outlineSpotShadowColor="#00FFFFFF"
+        android:outlineAmbientShadowColor="#00FFFFFF">
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/text22"
-        android:layout_centerHorizontal="true"
-    />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/league_name"
+            android:textSize="30sp"
+            android:padding="2dp"
+            android:fontFamily="@font/asul_bold"
+            android:textColor="@color/white"
+            android:textAlignment="center"/>
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:id="@+id/seasons_recycleview"/>
+            android:id="@+id/seasons_recycleview"
+            android:background="#212A3E"
+            android:backgroundTint="#212A3E"
+            android:outlineSpotShadowColor="#00FFFFFF"
+            android:outlineAmbientShadowColor="#00FFFFFF"
+            android:layout_below="@id/league_name"/>
 
 </RelativeLayout>

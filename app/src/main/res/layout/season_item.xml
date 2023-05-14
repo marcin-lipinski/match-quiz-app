@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-    <RelativeLayout
+        app:cardBackgroundColor="#212A3E"
+        android:background="#212A3E">
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
+            android:layout_margin="10dp"
+            app:cardCornerRadius="40sp"
+            app:cardElevation="20sp"
+            app:cardBackgroundColor="#BDCDD6"
+            android:background="#BDCDD6"
+            android:outlineAmbientShadowColor="#00FFFFFF"
+            android:outlineSpotShadowColor="#00FFFFFF">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="#BDCDD6"
+                android:elevation="20sp"
+                android:backgroundTint="#BDCDD6"
+                android:outlineSpotShadowColor="#00FFFFFF"
+                android:outlineAmbientShadowColor="#00FFFFFF">
 
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/season_name"
-                  android:textSize="20sp"
-                  android:layout_marginTop="150dp"
-                  android:padding="2dp"
-                  android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/season_name"
+                      android:textSize="25sp"
+                      android:layout_margin="10dp"
+                      android:padding="2dp"
+                      android:layout_centerHorizontal="true"
+                      android:layout_centerInParent="true"
+                      android:layout_centerVertical="true"
+                      android:fontFamily="@font/asul_bold"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.cardview.widget.CardView>

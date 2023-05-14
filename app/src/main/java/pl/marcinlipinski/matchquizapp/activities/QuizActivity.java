@@ -24,6 +24,7 @@ import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -56,7 +57,11 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
 
         SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(QuizActivity.this);
         eventService = new EventService(databaseContext);
-        eventService.getEventsBySeasonId(seasonId, this, QuizActivity.this);
+        //eventService.getEventsBySeasonId(seasonId, this, QuizActivity.this);
+        ArrayList<Event> events = new ArrayList<>();
+        Event e1 = Event.builder().id(1L).startTime(LocalDate.now()).awayTeam("pogon").awayTeamScore(1).winnerCode(1).homeTeamScore(2).homeTeam("hutnik").awayTeamId(21L).awayTeamLogo("https:\\/\\/sport-enter.loc\\/storage\\/no-loga-liga.png").homeTeamId(2L).homeTeamLogo("https:\\/\\/sport-enter.loc\\/storage\\/no-loga-liga.png").build();
+        events.add(e1);
+        onSuccess(events);
     }
 
     @Override
@@ -143,12 +148,12 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
 
     @Override
     public void onCardAppeared(View view, int position) {
-        Random ran = new Random();
-        int r = (ran.nextInt(256) << 16) & 0x00FF0000;
-        int g = (ran.nextInt(256) << 8) & 0x0000FF00;
-        int b = ran.nextInt(256) & 0x000000FF;
-        view.setBackgroundColor(0xFF000000 | r | g | b);
-        view.invalidate();
+//        Random ran = new Random();
+//        int r = (ran.nextInt(256) << 16) & 0x00FF0000;
+//        int g = (ran.nextInt(256) << 8) & 0x0000FF00;
+//        int b = ran.nextInt(256) & 0x000000FF;
+//        view.setBackgroundColor(0xFF000000 | r | g | b);
+//        view.invalidate();
     }
 
     @Override
