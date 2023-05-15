@@ -23,11 +23,10 @@
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ChoosingSeasonActivity"/>
+        <activity android:name=".activities.SeasonActivity"/>
         <activity android:name=".activities.QuizActivity"/>
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
     </application>

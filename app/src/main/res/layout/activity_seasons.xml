@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".activities.ChoosingSeasonActivity"
+        tools:context=".activities.SeasonActivity"
         android:background="#212A3E"
         android:backgroundTint="#212A3E"
         android:outlineSpotShadowColor="#00FFFFFF"

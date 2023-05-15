@@ -2,40 +2,52 @@ package pl.marcinlipinski.matchquizapp.activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import androidx.annotation.ColorInt;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import com.yuyakaido.android.cardstackview.*;
+import nl.dionsegijn.konfetti.core.Angle;
+import nl.dionsegijn.konfetti.core.PartyFactory;
+import nl.dionsegijn.konfetti.core.Position;
+import nl.dionsegijn.konfetti.core.emitter.Emitter;
+import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
+import nl.dionsegijn.konfetti.core.models.Shape;
 import pl.marcinlipinski.matchquizapp.CustomCardStackListener;
-import pl.marcinlipinski.matchquizapp.QuestionQuizAdapter;
+import pl.marcinlipinski.matchquizapp.QuestionsQuizAdapter;
 import pl.marcinlipinski.matchquizapp.R;
-import pl.marcinlipinski.matchquizapp.database.SQLiteDatabaseContext;
+import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Event;
+import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
+import nl.dionsegijn.konfetti.xml.KonfettiView;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
-import static androidx.core.location.LocationManagerCompat.requestLocationUpdates;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class QuizActivity extends Activity implements VolleyCallback<ArrayList<Event>>, LocationListener, CustomCardStackListener {
+    @Inject
     EventService eventService;
+    @Inject
+    ApproachService approachService;
     LocationManager locationManager;
     CardStackView cardStackView;
+    private KonfettiView konfettiView;
+    private Shape.DrawableShape drawableShape;
     private static final int GPS_TIME_INTERVAL = 1000 * 60 * 5;
     private static final int GPS_DISTANCE = 1000;
     final static String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -44,24 +56,30 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     private ArrayList<Event> chosenEvents;
     private final Random random = new Random();
     private int score;
-    QuestionQuizAdapter adapter;
+    QuestionsQuizAdapter adapter;
     CardStackLayoutManager manager;
+    TextView questionNumberTextView, scoreLeagueName, yourScoreText, yourScoreValueText, scoreSeasonName;
+    Button returnButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_layout);
+        setContentView(R.layout.activity_quiz);
+        AppInjector.inject(this);
+
+        questionNumberTextView = findViewById(R.id.question_number);
+        scoreLeagueName = findViewById(R.id.score_league_name);
+        yourScoreText = findViewById(R.id.your_score);
+        yourScoreValueText = findViewById(R.id.score_score);
+        scoreSeasonName = findViewById(R.id.score_season_name);
+        konfettiView = findViewById(R.id.konffettiView);
+        returnButton = findViewById(R.id.return_button);
+        returnButton.setOnClickListener(view -> onBackPressed());
+        drawableShape = new Shape.DrawableShape(Objects.requireNonNull(ContextCompat.getDrawable(getApplicationContext(), R.drawable.baseline_favorite_black_icon)), true);
+
         Long seasonId = getIntent().getLongExtra("seasonId", -1);
-
         provideLocation();
-
-        SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(QuizActivity.this);
-        eventService = new EventService(databaseContext);
-        //eventService.getEventsBySeasonId(seasonId, this, QuizActivity.this);
-        ArrayList<Event> events = new ArrayList<>();
-        Event e1 = Event.builder().id(1L).startTime(LocalDate.now()).awayTeam("pogon").awayTeamScore(1).winnerCode(1).homeTeamScore(2).homeTeam("hutnik").awayTeamId(21L).awayTeamLogo("https:\\/\\/sport-enter.loc\\/storage\\/no-loga-liga.png").homeTeamId(2L).homeTeamLogo("https:\\/\\/sport-enter.loc\\/storage\\/no-loga-liga.png").build();
-        events.add(e1);
-        onSuccess(events);
+        eventService.getEventsBySeasonId(seasonId, this, QuizActivity.this);
     }
 
     @Override
@@ -77,7 +95,7 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
         manager.setDirections(Direction.HORIZONTAL);
         manager.setSwipeableMethod(SwipeableMethod.Automatic);
 
-        adapter = new QuestionQuizAdapter(chosenEvents, this, this.eventService, QuizActivity.this, userLocation);
+        adapter = new QuestionsQuizAdapter(chosenEvents, this, this.eventService, QuizActivity.this, userLocation);
         cardStackView = findViewById(R.id.cardstackview);
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
@@ -127,62 +145,100 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     }
 
     @Override
-    public void onCardDragging(Direction direction, float ratio) {
-
-    }
+    public void onCardDragging(Direction direction, float ratio) {}
 
     @Override
-    public void onCardSwiped(Direction direction) {
-        Log.d("Swa", "Card swapped");
-    }
+    public void onCardSwiped(Direction direction) {}
 
     @Override
-    public void onCardRewound() {
-
-    }
+    public void onCardRewound() {}
 
     @Override
-    public void onCardCanceled() {
-
-    }
+    public void onCardCanceled() {}
 
     @Override
     public void onCardAppeared(View view, int position) {
-//        Random ran = new Random();
-//        int r = (ran.nextInt(256) << 16) & 0x00FF0000;
-//        int g = (ran.nextInt(256) << 8) & 0x0000FF00;
-//        int b = ran.nextInt(256) & 0x000000FF;
-//        view.setBackgroundColor(0xFF000000 | r | g | b);
-//        view.invalidate();
+        String text = "Question " + (manager.getTopPosition() + 1) + " of " + adapter.getItemCount();
+        questionNumberTextView.setText(text);
     }
 
     @Override
-    public void onCardDisappeared(View view, int position) {
-
-    }
+    public void onCardDisappeared(View view, int position) {}
 
     @Override
     public void onButtonClick(Button button, Button[] buttons, int position) {
-        for(Button but : buttons){
-            if(button != but)but.setClickable(false);
-        }
+        for(Button but : buttons) if(button != but)but.setClickable(false);
 
         String buttonText = String.valueOf(button.getText());
         Event event = chosenEvents.get(position);
         String correctString = event.getHomeTeamScore() + ":" + event.getAwayTeamScore();
 
         if(correctString.equals(buttonText)) {
-            button.setBackgroundColor(0xFF00EE00);
+            button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_green));
             score++;
-            Log.d("Poprawnie", correctString + " == " + buttonText + ", score = " + score);
         }
-        else{
-            button.setBackgroundColor(0xFFEE0000);
-            Log.d("Niepoprawnie", correctString + " == " + buttonText + ", score = " + score);
-        }
+        else button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_red));
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> cardStackView.swipe(), 2000);
-        adapter.getCurrentCard().setClickable(true);
+        cardStackView.postDelayed(() -> cardStackView.swipe(), 2000);
+        if(position == adapter.getItemCount() - 1) showScoreBoard();
+    }
+
+    public void showScoreBoard(){
+        String scoreText = "Points: " + score + "/" + adapter.getItemCount();
+        String leagueName = "League: " + ApproachService.getTemporaryApproach().getLeague();
+        String seasonName = "Season: " + ApproachService.getTemporaryApproach().getSeason();
+
+        ApproachService.getTemporaryApproach().setScore(score);
+
+        scoreLeagueName.setText(leagueName);
+        scoreLeagueName.setText(seasonName);
+        yourScoreValueText.setText(scoreText);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            yourScoreText.setVisibility(View.VISIBLE);
+            yourScoreText.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+        }, 1800);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            scoreLeagueName.setVisibility(View.VISIBLE);
+            scoreLeagueName.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+        }, 2100);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            scoreSeasonName.setVisibility(View.VISIBLE);
+            scoreSeasonName.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+        }, 2400);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            yourScoreValueText.setVisibility(View.VISIBLE);
+            yourScoreValueText.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+            rain();
+        }, 2700);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            returnButton.setVisibility(View.VISIBLE);
+            returnButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        }, 3000);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ApproachService.getTemporaryApproach().setApproachDate(LocalDate.now());
+        approachService.saveGame();
+        finish();
+    }
+
+    public void rain() {
+        EmitterConfig emitterConfig = new Emitter(score * 1000L + 500, TimeUnit.MILLISECONDS).perSecond(100);
+        konfettiView.start(
+            new PartyFactory(emitterConfig)
+                .angle(Angle.TOP)
+                .spread(70)
+                .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
+                .colors(Arrays.asList(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
+                .setSpeedBetween(5f, 60f)
+                .position(new Position.Relative(0.0, 1.0).between(new Position.Relative(1.0, 1.0)))
+                .build()
+        );
     }
 }

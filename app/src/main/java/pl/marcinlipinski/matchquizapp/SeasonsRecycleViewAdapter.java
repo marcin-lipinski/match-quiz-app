@@ -8,18 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
+import pl.marcinlipinski.matchquizapp.models.Season;
+import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecycleViewAdapter.SeasonHolder> {
     private final RecyclerViewInterface recyclerViewInterface;
     Context context;
-    static List<String> names;
-    static List<Long> ids;
+    static ArrayList<Season> seasons;
 
-    public SeasonsRecycleViewAdapter(Context context, List<String> names, List<Long> ids, RecyclerViewInterface recyclerViewInterface){
-        SeasonsRecycleViewAdapter.names = names;
-        SeasonsRecycleViewAdapter.ids = ids;
+    public SeasonsRecycleViewAdapter(Context context, ArrayList<Season> seasons, RecyclerViewInterface recyclerViewInterface){
+        SeasonsRecycleViewAdapter.seasons = seasons;
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
     }
@@ -28,18 +28,18 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
     @Override
     public SeasonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.season_item, parent, false);
+        View view = inflater.inflate(R.layout.viewholder_season, parent, false);
         return new SeasonHolder(view, recyclerViewInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull SeasonHolder holder, int position) {
-        holder.seasonNameTextView.setText(names.get(position));
+        holder.seasonNameTextView.setText(seasons.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return names.size();
+        return seasons.size();
     }
 
     public static class SeasonHolder extends RecyclerView.ViewHolder {
@@ -52,7 +52,8 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
                 if(recyclerViewInterface != null){
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
-                        recyclerViewInterface.onItemClick(ids.get(position));
+                        ApproachService.getTemporaryApproach().setSeason(seasons.get(position).getName());
+                        recyclerViewInterface.onItemClick(seasons.get(position).getId());
                     }
                 }
             });

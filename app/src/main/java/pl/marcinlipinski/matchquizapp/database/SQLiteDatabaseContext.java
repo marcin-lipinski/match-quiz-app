@@ -4,17 +4,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import androidx.annotation.Nullable;
 import lombok.Getter;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 
+import javax.inject.Inject;
+
 @Getter
 
 public class SQLiteDatabaseContext extends SQLiteOpenHelper implements DatabaseContext {
+    @Inject
     public SQLiteDatabaseContext(@Nullable Context context) {
         super(context, "matchquizdb", null, 1);
     }
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {}
 
@@ -22,7 +25,7 @@ public class SQLiteDatabaseContext extends SQLiteOpenHelper implements DatabaseC
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {}
 
     @Override
-    public void createTable(String query){
+    public void query(String query){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(query);
         db.close();

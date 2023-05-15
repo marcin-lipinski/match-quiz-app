@@ -14,6 +14,7 @@ import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.League;
 import pl.marcinlipinski.matchquizapp.models.Season;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,30 +22,27 @@ import java.util.List;
 import java.util.Map;
 
 public class LeaguesService implements Service<League> {
-    private final DatabaseContext databaseContext;
+    @Inject
+    DatabaseContext databaseContext;
+
+    @Inject
     public LeaguesService(DatabaseContext databaseContext){
         this.databaseContext = databaseContext;
+        this.initialize();
     }
 
     @Override
     public void initialize(){
-        File file = new File("//data//data//pl.marcinlipinski.matchquizapp//databases//matchquizdb");
-        if(file.exists()) return;
-
-        databaseContext.createTable("CREATE TABLE LEAGUE_TABLE (ID INTEGER PRIMARY KEY, NAME TEXT, LOGO TEXT)");
-        save(new League(191L, "Ekstraklasa", "https://tipsscore.com/resb/league/poland-ekstraklasa.png"));
-        save(new League(251L,"LaLiga","https://tipsscore.com/resb/league/spain-laliga.png"));
-        save(new League(317L, "Premier League","https://tipsscore.com/resb/league/england-premier-league.png"));
-        save(new League(498L, "Ligue 1", "https://tipsscore.com/resb/league/france-ligue-1.png"));
-        save(new League(512L, "Bundesliga", "https://tipsscore.com/resb/league/germany-bundesliga.png"));
-        save(new League(592L,"Serie A", "https://tipsscore.com/resb/league/italy-serie-a.png"));
-        save(new League(817L,"UEFA Champions League", "https://tipsscore.com/resb/league/europe-uefa-champions-league.png"));
-        save(new League(818L,"UEFA Europa League", "https://tipsscore.com/resb/league/europe-uefa-europa-league.png"));
-        save(new League(8911L, "UEFA Europa Conference League", "https://tipsscore.com/resb/league/europe-uefa-europa-conference-league.png"));
-    }
-
-    public void save(League league){
-        databaseContext.save("LEAGUE_TABLE", newContent(league));
+        databaseContext.query("CREATE TABLE if not exists LEAGUE_TABLE (ID INTEGER PRIMARY KEY, NAME TEXT, LOGO TEXT)");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 191L + "', " + "'Ekstraklasa'" + ", 'https://tipsscore.com/resb/league/poland-ekstraklasa.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 191L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 251L + "', " + "'LaLiga'" + ", 'https://tipsscore.com/resb/league/spain-laliga.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 251L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 317L + "', " + "'Premier League'" + ", 'https://tipsscore.com/resb/league/england-premier-league.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 317L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 498L + "', " + "'Ligue 1'" + ", 'https://tipsscore.com/resb/league/france-ligue-1.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 498L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 512L + "', " + "'Bundesliga'" + ", 'https://tipsscore.com/resb/league/germany-bundesliga.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 512L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 592L + "', " + "'Serie A'" + ", 'https://tipsscore.com/resb/league/italy-serie-a.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 592L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 817L + "', " + "'UEFA Champions League'" + ", 'https://tipsscore.com/resb/league/europe-uefa-champions-league.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 817L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 818L + "', " + "'UEFA Europa League'" + ", 'https://tipsscore.com/resb/league/europe-uefa-europa-league.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 818L + ");");
+        databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 8911L + "', " + "'UEFA Europa Conference League'" + ", 'https://tipsscore.com/resb/league/europe-uefa-europa-conference-league.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 8911L + ");");
     }
 
     public ArrayList<League> getAll(){
@@ -89,7 +87,7 @@ public class LeaguesService implements Service<League> {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String>  params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
+                params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
                 return params;

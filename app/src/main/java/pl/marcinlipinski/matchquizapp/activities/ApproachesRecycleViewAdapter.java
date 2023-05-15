@@ -27,7 +27,7 @@ public class ApproachesRecycleViewAdapter extends RecyclerView.Adapter<Approache
     @Override
     public ApproachesRecycleViewAdapter.ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.historyrecycleview_item, parent, false);
+        View view = inflater.inflate(R.layout.recycleview_history, parent, false);
         return new ApproachesRecycleViewAdapter.ApproachHolder(view, recyclerViewInterface);
     }
 
@@ -37,8 +37,8 @@ public class ApproachesRecycleViewAdapter extends RecyclerView.Adapter<Approache
         holder.leagueNameTextView.setText(approach.getLeague());
         holder.appraochDateTextView.setText(approach.getApproachDate().toString());
         holder.approachScoreTextView.setText(approach.getScore() + "/10");
-        if(approach.getFavourite() == 1) holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red);
-        else holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_black);
+        if(approach.getFavourite() == 1) holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
+        else holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_black_icon);
     }
 
     @Override
@@ -70,10 +70,6 @@ public class ApproachesRecycleViewAdapter extends RecyclerView.Adapter<Approache
                     recyclerViewInterface.onDeleteButtonClick(deleteButton, position);
                 }
             });
-
-
         }
-
-
     }
 }

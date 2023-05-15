@@ -3,9 +3,9 @@
     <item
         android:id="@+id/play"
         android:title="Play"
-        android:icon="@drawable/play_icon"/>
+        android:icon="@drawable/baseline_play_icon"/>
     <item
         android:id="@+id/played"
         android:title="History"
-        android:icon="@drawable/played_icon"/>
+        android:icon="@drawable/baseline_history_icon"/>
 </menu>

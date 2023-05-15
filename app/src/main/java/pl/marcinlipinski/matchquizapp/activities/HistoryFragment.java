@@ -10,44 +10,39 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.ApproachesRecycleViewInterface;
 import pl.marcinlipinski.matchquizapp.R;
-import pl.marcinlipinski.matchquizapp.database.SQLiteDatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Approach;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class HistoryFragment extends Fragment implements ApproachesRecycleViewInterface {
-    static ArrayList<Approach> approaches;
+    @Inject
     ApproachService approachService;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     ApproachesRecycleViewAdapter approachesRecycleViewAdapter;
+    static ArrayList<Approach> approaches;
     static boolean ap = true;
+
+    @Inject
+    public HistoryFragment(ApproachService approachService){
+        this.approachService = approachService;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_history, container, false);
+        View fragmentHistory =  inflater.inflate(R.layout.fragment_history, container, false);
 
-        SQLiteDatabaseContext databaseContext = new SQLiteDatabaseContext(getActivity());
+        approaches = approachService.getAllApproaches();
 
-        approachService = new ApproachService(databaseContext);
-        approachService.initialize();
-
-
-        if(ap){
-            approaches = approachService.getAllApproaches();
-            approaches.add(Approach.builder().id(1L).approachDate(LocalDate.now()).favourite(1).league("UEFA Europe Conference League").score(4).build());
-            approaches.add(Approach.builder().id(2L).approachDate(LocalDate.now()).favourite(0).league("UEFA Europe Conference League").score(3).build());
-            approaches.add(Approach.builder().id(3L).approachDate(LocalDate.now().minusMonths(1)).favourite(1).league("UEFA Europe Conference League").score(5).build());
-            ap = false;
-        }
-        recyclerView = view.findViewById(R.id.history_recycleview);
+        recyclerView = fragmentHistory.findViewById(R.id.history_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         approachesRecycleViewAdapter = new ApproachesRecycleViewAdapter(getActivity(), approaches, this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(approachesRecycleViewAdapter);
 
-        return view;
+        return fragmentHistory;
     }
 
     public Comparator<Approach> approachSort = (approachA, approachB) -> {
@@ -64,13 +59,13 @@ public class HistoryFragment extends Fragment implements ApproachesRecycleViewIn
 
         if(approach.getFavourite() == 1){
             approachService.setApproachFavourite(approach.getId(), 0);
-            button.setImageResource(R.drawable.baseline_favorite_black);
+            button.setImageResource(R.drawable.baseline_favorite_black_icon);
 
             approach.setFavourite(0);
         }
         else{
             approachService.setApproachFavourite(approach.getId(), 1);
-            button.setImageResource(R.drawable.baseline_favorite_red);
+            button.setImageResource(R.drawable.baseline_favorite_red_icon);
 
             approach.setFavourite(1);
         }

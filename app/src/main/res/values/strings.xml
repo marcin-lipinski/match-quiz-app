@@ -2,4 +2,8 @@
     <string name="app_name">Match Quiz App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo_of_away_team">Logo of away team</string>
+    <string name="logo_of_home_team">Logo of home team</string>
+    <string name="your_score">Your score</string>
+    <string name="finish">Finish</string>
 </resources>

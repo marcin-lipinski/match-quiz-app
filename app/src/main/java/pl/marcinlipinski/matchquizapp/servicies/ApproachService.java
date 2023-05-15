@@ -3,26 +3,38 @@ package pl.marcinlipinski.matchquizapp.servicies;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import kotlin.Function;
+import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.database.SQLiteDatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Approach;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class ApproachService implements Service<Approach> {
-    private final SQLiteDatabaseContext databaseContext;
-    public ApproachService(SQLiteDatabaseContext databaseContext){
+    @Inject
+    DatabaseContext databaseContext;
+    private static Approach approach;
+
+    @Inject
+    public ApproachService(DatabaseContext databaseContext){
         this.databaseContext = databaseContext;
+        this.initialize();
     }
     @Override
     public void initialize() {
-        databaseContext.createTable("CREATE TABLE if not exists APPROACH_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                            "LEAGUE TEXT, APPROACH_TIME TEXT, SCORE TEXT, FAVOURITE INTEGER)");
+        databaseContext.query("CREATE TABLE if not exists APPROACH_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                "LEAGUE TEXT, SEASON TEXT, APPROACH_TIME TEXT, SCORE TEXT, FAVOURITE INTEGER)");
     }
 
+    public static Approach getTemporaryApproach(){return ApproachService.approach;}
+    public static void resetTemporaryApproach(){ApproachService.approach = new Approach();}
+
     public ArrayList<Approach> getAllApproaches(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         SQLiteDatabase db = databaseContext.read();
         Cursor cursor = db.rawQuery("SELECT * FROM APPROACH_TABLE", null);
         ArrayList<Approach> approaches = new ArrayList<>();
@@ -31,9 +43,10 @@ public class ApproachService implements Service<Approach> {
                 approaches.add(new Approach(
                         cursor.getLong(0),
                         cursor.getString(1),
-                        LocalDate.parse(cursor.getString(2), formatter),
-                        cursor.getInt(3),
-                        cursor.getInt(4)));
+                        cursor.getString(2),
+                        LocalDate.parse(cursor.getString(3), formatter),
+                        cursor.getInt(4),
+                        cursor.getInt(5)));
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -41,11 +54,16 @@ public class ApproachService implements Service<Approach> {
     }
 
     public void setApproachFavourite(Long approachId, int value){
-        databaseContext.createTable("UPDATE APPROACH_TABLE SET FAVOURITE = " + value + " WHERE ID = " + approachId);
+        databaseContext.query("UPDATE APPROACH_TABLE SET FAVOURITE = " + value + " WHERE ID = " + approachId);
     }
 
     public void deleteApproach(Long approachId){
-        databaseContext.createTable("DELETE FROM APPROACH_TABLE WHERE ID = " + approachId);
+        databaseContext.query("DELETE FROM APPROACH_TABLE WHERE ID = " + approachId);
+    }
+
+    public void saveGame(){
+        ApproachService.approach.setFavourite(0);
+        databaseContext.save("APPROACH_TABLE", newContent(ApproachService.approach));
     }
 
     @Override
@@ -53,6 +71,7 @@ public class ApproachService implements Service<Approach> {
         ContentValues cv = new ContentValues();
         cv.put("ID", approach.getId());
         cv.put("LEAGUE", approach.getLeague());
+        cv.put("SEASON", approach.getSeason());
         cv.put("APPROACH_TIME", approach.getApproachDate().toString());
         cv.put("SCORE", approach.getScore());
         cv.put("FAVOURITE", approach.getFavourite());

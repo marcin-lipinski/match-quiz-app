@@ -12,12 +12,12 @@ import pl.marcinlipinski.matchquizapp.models.League;
 
 import java.util.ArrayList;
 
-public class LeagueGridViewAdapter extends BaseAdapter {
+public class LeaguesGridViewAdapter extends BaseAdapter {
     Context context;
     ArrayList<League> leagues;
     LayoutInflater layoutInflater;
 
-    public LeagueGridViewAdapter(Context context, ArrayList<League> leagues) {
+    public LeaguesGridViewAdapter(Context context, ArrayList<League> leagues) {
         this.context = context;
         this.leagues = leagues;
     }
@@ -43,7 +43,7 @@ public class LeagueGridViewAdapter extends BaseAdapter {
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         if(view == null){
-            view = layoutInflater.inflate(R.layout.grid_item, null);
+            view = layoutInflater.inflate(R.layout.cardview_league, null);
         }
 
         ImageView imageView = view.findViewById(R.id.grid_image);

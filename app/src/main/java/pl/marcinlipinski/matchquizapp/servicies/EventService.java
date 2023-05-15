@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Event;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,15 +20,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EventService implements Service<Event> {
-    private final DatabaseContext databaseContext;
+    @Inject
+    DatabaseContext databaseContext;
+    @Inject
     public EventService(DatabaseContext databaseContext){
         this.databaseContext = databaseContext;
+        this.initialize();
     }
 
     public void initialize(){
-        databaseContext.createTable("CREATE TABLE if not exists EVENT_TABLE (ID INTEGER PRIMARY KEY, " +
-                                            "HOME_TEAM TEXT, AWAY_TEAM TEXT, HOME_TEAM_LOGO TEXT, AWAY_TEAM_LOGO TEXT, " +
-                                            "HOME_TEAM_SCORE TEXT, AWAY_TEAM_SCORE TEXT, START_TIME TEXT)");
+        databaseContext.query("CREATE TABLE if not exists EVENT_TABLE (ID INTEGER PRIMARY KEY, " +
+                            "HOME_TEAM TEXT, AWAY_TEAM TEXT, HOME_TEAM_LOGO TEXT, AWAY_TEAM_LOGO TEXT, " +
+                            "HOME_TEAM_SCORE TEXT, AWAY_TEAM_SCORE TEXT, START_TIME TEXT)");
     }
 
     @Override
@@ -43,7 +47,6 @@ public class EventService implements Service<Event> {
         cv.put("START_TIME", event.getStartTime().toString());
         return cv;
     }
-
 
     public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback volleyCallback){
         String url = "https://sportscore1.p.rapidapi.com/seasons/" + seasonId + "/events";
@@ -84,7 +87,7 @@ public class EventService implements Service<Event> {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
+                params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
                 return params;
@@ -116,7 +119,7 @@ public class EventService implements Service<Event> {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "04f771aac6mshe49043b94d7e752p1e5388jsn4490c1fd12b3");
+                params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
                 return params;

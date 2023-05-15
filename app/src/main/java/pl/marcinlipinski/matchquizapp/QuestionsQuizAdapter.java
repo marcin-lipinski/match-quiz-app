@@ -12,9 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import org.jetbrains.annotations.NotNull;
 import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
@@ -22,7 +22,7 @@ import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapter.CardHolder> {
+public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdapter.CardHolder> {
 
     private final Random random;
     private final Location userLocation;
@@ -32,9 +32,8 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
     EventService eventService;
     DecimalFormat decimalFormat;
     Geocoder coder;
-    ArrayList<CardHolder> cardHolders = new ArrayList<>();
 
-    public QuestionQuizAdapter(ArrayList<Event> events, Context context, EventService eventService, CustomCardStackListener cardStackListener, Location userLocation) {
+    public QuestionsQuizAdapter(ArrayList<Event> events, Context context, EventService eventService, CustomCardStackListener cardStackListener, Location userLocation) {
         this.events = events;
         this.context = context;
         this.eventService = eventService;
@@ -49,7 +48,7 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
     @Override
     public CardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.question_card, parent, false);
+        View view = inflater.inflate(R.layout.cardview_question, parent, false);
         return new CardHolder(view);
     }
 
@@ -57,21 +56,20 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
         Address address;
         try {
             address = coder.getFromLocationName(city,1).get(0);
+            Location startPoint = new Location("locationA");
+            startPoint.setLatitude(userLocation.getLatitude());
+            startPoint.setLongitude(userLocation.getLongitude());
+
+            Location endPoint = new Location("locationA");
+            endPoint.setLatitude(address.getLatitude());
+            endPoint.setLongitude(address.getLongitude());
+
+            double distance = startPoint.distanceTo(endPoint)/1000;
+            return decimalFormat.format(distance) + " km";
         }
         catch(Exception e) {
             return "-----";
         }
-
-        Location startPoint = new Location("locationA");
-        startPoint.setLatitude(userLocation.getLatitude());
-        startPoint.setLongitude(userLocation.getLongitude());
-
-        Location endPoint = new Location("locationA");
-        endPoint.setLatitude(address.getLatitude());
-        endPoint.setLongitude(address.getLongitude());
-
-        double distance = startPoint.distanceTo(endPoint)/1000;
-        return decimalFormat.format(distance) + " km";
     }
 
     public void findWinner(Long winnerId, CardHolder holder){
@@ -125,30 +123,24 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
         holder.scoreFourButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button)view, buttons, position));
     }
 
-    public CardHolder getCurrentCard(){
-        return cardHolders.remove(0);
-    }
     @Override
     public void onBindViewHolder(@NonNull  CardHolder holder, int position) {
-        cardHolders.add(holder);
-        holder.setClickable(false);
-
         Event event = events.get(position);
         generateOptions(holder, event, position);
 
         holder.winnerCityDistanceTextView.setText("-----");
         Picasso.with(context).load(event.getHomeTeamLogo()).fit().into(holder.homeTeamLogo);
         Picasso.with(context).load(event.getAwayTeamLogo()).fit().into(holder.awayTeamLogo);
-        //if(event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
-        //else if(event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
+        if(event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
+        else if(event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
 
         holder.homeTeamTextView.setText(event.getHomeTeam());
         holder.awayTeamTextView.setText(event.getAwayTeam());
         holder.matchDateTextView.setText(event.getStartTime().toString());
-        holder.scoreOneButton.setBackgroundColor(0xFFFFFFFF);
-        holder.scoreTwoButton.setBackgroundColor(0xFFFFFFFF);
-        holder.scoreThreeButton.setBackgroundColor(0xFFFFFFFF);
-        holder.scoreFourButton.setBackgroundColor(0xFFFFFFFF);
+        holder.scoreOneButton.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button_yellow));
+        holder.scoreTwoButton.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button_yellow));
+        holder.scoreThreeButton.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button_yellow));
+        holder.scoreFourButton.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button_yellow));
     }
 
     @Override
@@ -173,18 +165,6 @@ public class QuestionQuizAdapter extends RecyclerView.Adapter<QuestionQuizAdapte
             scoreTwoButton = itemView.findViewById(R.id.score_two_button);
             scoreThreeButton = itemView.findViewById(R.id.score_three_button);
             scoreFourButton = itemView.findViewById(R.id.score_four_button);
-            setClickable(false);
-        }
-
-        public void setClickable(boolean clickable){
-            scoreOneButton.setClickable(clickable);
-            scoreTwoButton.setClickable(clickable);
-            scoreThreeButton.setClickable(clickable);
-            scoreFourButton.setClickable(clickable);
-            scoreOneButton.setActivated(clickable);
-            scoreTwoButton.setActivated(clickable);
-            scoreThreeButton.setActivated(clickable);
-            scoreFourButton.setActivated(clickable);
         }
     }
 }

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 public interface DatabaseContext {
-    void createTable(String query);
+    void query(String query);
     void save(String tableName, ContentValues content);
     SQLiteDatabase read();
 }
