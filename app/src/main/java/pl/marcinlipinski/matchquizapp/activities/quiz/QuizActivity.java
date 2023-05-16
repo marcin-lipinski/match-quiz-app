@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.quiz;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,8 +25,6 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter;
 import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.core.models.Shape;
 import pl.marcinlipinski.matchquizapp.R;
-import pl.marcinlipinski.matchquizapp.activities.quiz.CustomCardStackListener;
-import pl.marcinlipinski.matchquizapp.activities.quiz.QuestionsQuizAdapter;
 import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
@@ -188,8 +186,6 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
         String leagueName = "League: " + ApproachService.getTemporaryApproach().getLeague();
         String seasonName = "Season: " + ApproachService.getTemporaryApproach().getSeason();
 
-        ApproachService.getTemporaryApproach().setScore(score);
-
         scoreLeagueName.setText(leagueName);
         scoreLeagueName.setText(seasonName);
         yourScoreValueText.setText(scoreText);
@@ -223,6 +219,7 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
 
     @Override
     public void onBackPressed() {
+        ApproachService.getTemporaryApproach().setScore(score);
         ApproachService.getTemporaryApproach().setApproachDate(LocalDate.now());
         approachService.saveGame();
         finish();

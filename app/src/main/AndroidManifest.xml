@@ -19,15 +19,15 @@
             android:testOnly="false"
             android:debuggable="true" tools:ignore="HardcodedDebugMode">
         <activity
-                android:name=".activities.MainActivity"
+                android:name=".activities.main.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SeasonActivity"/>
-        <activity android:name=".activities.QuizActivity"/>
+        <activity android:name=".activities.seasons.SeasonActivity"/>
+        <activity android:name=".activities.quiz.QuizActivity"/>
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
     </application>
 

@@ -108,7 +108,10 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
                 int scoreTwo = random.nextInt(5);
                 String tempScore = scoreOne + ":" + scoreTwo;
                 if(tempScore.equals(correctScore)) i--;
-                else scores[i] = tempScore;
+                else if(i > 0){
+                    if(scores[i - 1].equals(tempScore)) i--;
+                }
+                scores[i] = tempScore;
             }
             scores[correctIndex] = correctScore;
         }

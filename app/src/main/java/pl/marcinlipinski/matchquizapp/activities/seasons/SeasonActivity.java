@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
-import pl.marcinlipinski.matchquizapp.activities.QuizActivity;
+import pl.marcinlipinski.matchquizapp.activities.quiz.QuizActivity;
 import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Season;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class SeasonActivity extends AppCompatActivity implements RecyclerViewInterface {
     @Inject
     LeaguesService leaguesService;
-    ArrayList<Season> seasons;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seasons);
