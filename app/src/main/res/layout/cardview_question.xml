@@ -142,7 +142,6 @@
                     android:textSize="20sp"
                     android:textAlignment="center"
                     android:textColor="#212A3E"/>
-
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </androidx.cardview.widget.CardView>

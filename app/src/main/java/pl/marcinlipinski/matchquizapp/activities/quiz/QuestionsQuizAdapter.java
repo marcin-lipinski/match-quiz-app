@@ -110,8 +110,9 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
                 if(tempScore.equals(correctScore)) i--;
                 else if(i > 0){
                     if(scores[i - 1].equals(tempScore)) i--;
+                    else scores[i] = tempScore;
                 }
-                scores[i] = tempScore;
+                else scores[i] = tempScore;
             }
             scores[correctIndex] = correctScore;
         }
