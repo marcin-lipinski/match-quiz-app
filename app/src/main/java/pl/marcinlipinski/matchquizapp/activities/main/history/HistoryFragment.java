@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.main.history;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
@@ -8,21 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import pl.marcinlipinski.matchquizapp.ApproachesRecycleViewInterface;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Approach;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import javax.inject.Inject;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class HistoryFragment extends Fragment implements ApproachesRecycleViewInterface {
+public class HistoryFragment extends Fragment implements HistoryRecycleViewInterface {
     @Inject
     ApproachService approachService;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
-    ApproachesRecycleViewAdapter approachesRecycleViewAdapter;
+    HistoryRecycleViewAdapter approachesRecycleViewAdapter;
     static ArrayList<Approach> approaches;
     static boolean ap = true;
 
@@ -38,7 +36,7 @@ public class HistoryFragment extends Fragment implements ApproachesRecycleViewIn
 
         recyclerView = fragmentHistory.findViewById(R.id.history_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        approachesRecycleViewAdapter = new ApproachesRecycleViewAdapter(getActivity(), approaches, this);
+        approachesRecycleViewAdapter = new HistoryRecycleViewAdapter(getActivity(), approaches, this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(approachesRecycleViewAdapter);
 
@@ -76,7 +74,7 @@ public class HistoryFragment extends Fragment implements ApproachesRecycleViewIn
     @Override
     public void onDeleteButtonClick(ImageButton button, int approachPos) {
         approachService.deleteApproach(approaches.get(approachPos).getId());
-        ApproachesRecycleViewAdapter.approaches.remove(approachPos);
+        HistoryRecycleViewAdapter.approaches.remove(approachPos);
         approachesRecycleViewAdapter.notifyDataSetChanged();
     }
 }

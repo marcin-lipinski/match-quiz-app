@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.activities.quiz;
 
 import android.content.Context;
 import android.location.Address;
@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;

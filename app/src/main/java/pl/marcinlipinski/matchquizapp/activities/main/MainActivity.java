@@ -1,9 +1,11 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import pl.marcinlipinski.matchquizapp.*;
+import pl.marcinlipinski.matchquizapp.activities.main.history.HistoryFragment;
+import pl.marcinlipinski.matchquizapp.activities.main.play.PlayFragment;
 import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 
 import javax.inject.Inject;

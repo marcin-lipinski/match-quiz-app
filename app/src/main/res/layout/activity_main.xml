@@ -19,5 +19,8 @@
             android:id="@+id/navigation_bar"
             android:layout_alignParentBottom="true"
             app:menu="@menu/bottom_nav_menu"
-            />
+            style="@style/BottomNavigationViewStyle"
+            app:itemIconTint="@drawable/bottom_navigation_selector"
+            app:itemTextColor="@drawable/bottom_navigation_selector"
+    />
 </RelativeLayout>

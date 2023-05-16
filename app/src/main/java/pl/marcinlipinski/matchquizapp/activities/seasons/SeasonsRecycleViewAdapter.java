@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.activities.seasons;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
+import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Season;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 

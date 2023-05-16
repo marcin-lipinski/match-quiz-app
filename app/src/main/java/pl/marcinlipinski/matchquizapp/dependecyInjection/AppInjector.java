@@ -2,9 +2,9 @@ package pl.marcinlipinski.matchquizapp.dependecyInjection;
 
 
 import android.content.Context;
-import pl.marcinlipinski.matchquizapp.activities.MainActivity;
 import pl.marcinlipinski.matchquizapp.activities.QuizActivity;
-import pl.marcinlipinski.matchquizapp.activities.SeasonActivity;
+import pl.marcinlipinski.matchquizapp.activities.main.MainActivity;
+import pl.marcinlipinski.matchquizapp.activities.seasons.SeasonActivity;
 
 public class AppInjector {
     private static AppComponent appComponent;

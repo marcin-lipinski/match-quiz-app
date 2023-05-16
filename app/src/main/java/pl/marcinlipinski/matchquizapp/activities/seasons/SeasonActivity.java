@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.seasons;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
-import pl.marcinlipinski.matchquizapp.RecyclerViewInterface;
-import pl.marcinlipinski.matchquizapp.SeasonsRecycleViewAdapter;
+import pl.marcinlipinski.matchquizapp.activities.QuizActivity;
 import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Season;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;

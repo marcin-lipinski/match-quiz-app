@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.main.history;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,33 +8,32 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import pl.marcinlipinski.matchquizapp.ApproachesRecycleViewInterface;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Approach;
 import java.util.ArrayList;
 
-public class ApproachesRecycleViewAdapter extends RecyclerView.Adapter<ApproachesRecycleViewAdapter.ApproachHolder>{
+public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecycleViewAdapter.ApproachHolder>{
     static ArrayList<Approach> approaches;
-    ApproachesRecycleViewInterface recyclerViewInterface;
+    HistoryRecycleViewInterface recyclerViewInterface;
     Context context;
 
-    public ApproachesRecycleViewAdapter(Context context, ArrayList<Approach> approaches, ApproachesRecycleViewInterface recyclerViewInterface){
-        ApproachesRecycleViewAdapter.approaches = approaches;
+    public HistoryRecycleViewAdapter(Context context, ArrayList<Approach> approaches, HistoryRecycleViewInterface recyclerViewInterface){
+        HistoryRecycleViewAdapter.approaches = approaches;
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
     }
     @NonNull
     @Override
-    public ApproachesRecycleViewAdapter.ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HistoryRecycleViewAdapter.ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycleview_history, parent, false);
-        return new ApproachesRecycleViewAdapter.ApproachHolder(view, recyclerViewInterface);
+        return new HistoryRecycleViewAdapter.ApproachHolder(view, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ApproachesRecycleViewAdapter.ApproachHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HistoryRecycleViewAdapter.ApproachHolder holder, int position) {
         Approach approach = approaches.get(position);
-        holder.leagueNameTextView.setText(approach.getLeague());
+        holder.leagueNameTextView.setText(approach.getSeason());
         holder.appraochDateTextView.setText(approach.getApproachDate().toString());
         holder.approachScoreTextView.setText(approach.getScore() + "/10");
         if(approach.getFavourite() == 1) holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
@@ -49,7 +48,7 @@ public class ApproachesRecycleViewAdapter extends RecyclerView.Adapter<Approache
     public static class ApproachHolder extends RecyclerView.ViewHolder {
         TextView leagueNameTextView, appraochDateTextView, approachScoreTextView;
         ImageButton isFavouriteButton, deleteButton;
-        public ApproachHolder(@NonNull View itemView, ApproachesRecycleViewInterface recyclerViewInterface) {
+        public ApproachHolder(@NonNull View itemView, HistoryRecycleViewInterface recyclerViewInterface) {
             super(itemView);
             leagueNameTextView = itemView.findViewById(R.id.league_name);
             appraochDateTextView = itemView.findViewById(R.id.approach_date);

@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp.activities;
+package pl.marcinlipinski.matchquizapp.activities.main.play;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import pl.marcinlipinski.matchquizapp.LeaguesGridViewAdapter;
 import pl.marcinlipinski.matchquizapp.R;
+import pl.marcinlipinski.matchquizapp.activities.seasons.SeasonActivity;
 import pl.marcinlipinski.matchquizapp.models.League;
 import pl.marcinlipinski.matchquizapp.servicies.LeaguesService;
 

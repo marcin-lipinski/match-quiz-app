@@ -6,4 +6,6 @@
     <string name="logo_of_home_team">Logo of home team</string>
     <string name="your_score">Your score</string>
     <string name="finish">Finish</string>
+    <string name="play">Play</string>
+    <string name="history">History</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -13,12 +12,9 @@ import org.json.JSONException;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.League;
 import pl.marcinlipinski.matchquizapp.models.Season;
-
 import javax.inject.Inject;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LeaguesService implements Service<League> {

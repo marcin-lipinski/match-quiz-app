@@ -46,6 +46,7 @@
                       android:padding="2dp"
                       android:layout_centerHorizontal="true"
                       android:fontFamily="@font/asul_bold"
+                      android:textColor="#212A3E"
             />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

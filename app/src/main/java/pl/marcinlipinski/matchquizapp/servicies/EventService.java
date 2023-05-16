@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Event;
-
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

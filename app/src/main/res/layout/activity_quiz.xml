@@ -91,7 +91,8 @@
             android:fontFamily="@font/asul_bold"
             android:layout_centerHorizontal="true"
             android:visibility="invisible"
-            android:background="@drawable/rounded_button_yellow"/>
+            android:background="@drawable/rounded_button_yellow"
+            android:textColor="#212A3E"/>
     <nl.dionsegijn.konfetti.xml.KonfettiView
             android:id="@+id/konffettiView"
             android:layout_width="match_parent"

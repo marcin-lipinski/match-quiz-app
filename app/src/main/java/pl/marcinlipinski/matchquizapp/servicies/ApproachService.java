@@ -3,16 +3,12 @@ package pl.marcinlipinski.matchquizapp.servicies;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import kotlin.Function;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
-import pl.marcinlipinski.matchquizapp.database.SQLiteDatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Approach;
-
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class ApproachService implements Service<Approach> {
     @Inject

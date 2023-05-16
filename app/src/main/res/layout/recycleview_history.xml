@@ -31,35 +31,38 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/league_name"
                     android:textSize="16sp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:layout_alignRight="@+id/isfavourite_imagebutton"
-                    android:fontFamily="@font/asul_bold"/>
+                    android:layout_alignEnd="@+id/isfavourite_imagebutton"
+                    android:fontFamily="@font/asul_bold"
+                    android:textColor="#212A3E"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/approach_date"
                     android:textSize="16sp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="@font/asul_bold"
-                    android:layout_below="@id/league_name"/>
+                    android:layout_below="@id/league_name"
+                    android:textColor="#212A3E"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/approach_score"
                     android:textSize="20sp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="@font/asul_bold"
-                    android:layout_below="@id/approach_date"/>
+                    android:layout_below="@id/approach_date"
+                    android:textColor="#212A3E"/>
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/isfavourite_imagebutton"
                     android:background="@drawable/baseline_favorite_black_icon"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/delete_imagebutton"
                     android:scaleX="1.5" android:scaleY="1.5"/>
@@ -68,8 +71,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/delete_imagebutton"
                     android:background="@drawable/baseline_delete_icon"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
                     android:layout_centerVertical="true"
                     android:scaleX="1.5"
                     android:scaleY="1.5"/>

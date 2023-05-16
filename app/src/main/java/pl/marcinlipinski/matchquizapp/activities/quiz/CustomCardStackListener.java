@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.activities.quiz;
 
 import android.widget.Button;
 import com.yuyakaido.android.cardstackview.CardStackListener;

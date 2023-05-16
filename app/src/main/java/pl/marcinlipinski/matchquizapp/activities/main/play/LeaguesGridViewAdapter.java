@@ -1,4 +1,4 @@
-package pl.marcinlipinski.matchquizapp;
+package pl.marcinlipinski.matchquizapp.activities.main.play;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.League;
 
 import java.util.ArrayList;

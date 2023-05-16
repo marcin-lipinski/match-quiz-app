@@ -1,7 +1,11 @@
 package pl.marcinlipinski.matchquizapp.dependecyInjection;
 
 import dagger.Component;
-import pl.marcinlipinski.matchquizapp.activities.*;
+import pl.marcinlipinski.matchquizapp.activities.QuizActivity;
+import pl.marcinlipinski.matchquizapp.activities.main.MainActivity;
+import pl.marcinlipinski.matchquizapp.activities.main.history.HistoryFragment;
+import pl.marcinlipinski.matchquizapp.activities.main.play.PlayFragment;
+import pl.marcinlipinski.matchquizapp.activities.seasons.SeasonActivity;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.LeaguesService;
