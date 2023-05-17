@@ -53,10 +53,10 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         return new CardHolder(view);
     }
 
-    public String findDistanceToCity(String city){
+    public String findDistanceToCity(String city) {
         Address address;
         try {
-            address = coder.getFromLocationName(city,1).get(0);
+            address = coder.getFromLocationName(city, 1).get(0);
             Location startPoint = new Location("locationA");
             startPoint.setLatitude(userLocation.getLatitude());
             startPoint.setLongitude(userLocation.getLongitude());
@@ -65,20 +65,20 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
             endPoint.setLatitude(address.getLatitude());
             endPoint.setLongitude(address.getLongitude());
 
-            double distance = startPoint.distanceTo(endPoint)/1000;
+            double distance = startPoint.distanceTo(endPoint) / 1000;
             return decimalFormat.format(distance) + " km";
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return "-----";
         }
     }
 
-    public void findWinner(Long winnerId, CardHolder holder){
+    public void findWinner(Long winnerId, CardHolder holder) {
         eventService.getCityDistanceByWinnerTeamId(winnerId, context, new VolleyCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 holder.winnerCityDistanceTextView.setText(String.valueOf(findDistanceToCity(result)));
             }
+
             @Override
             public void onFail(String message) {
                 Log.d("Winner City Distance", message);
@@ -86,7 +86,7 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         });
     }
 
-    private void generateOptions(CardHolder holder, Event event, int position){
+    private void generateOptions(CardHolder holder, Event event, int position) {
         int homeScore = event.getHomeTeamScore();
         int awayScore = event.getAwayTeamScore();
         int correctIndex = random.nextInt(4);
@@ -95,24 +95,22 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         String correctScore = homeScore + ":" + awayScore;
         Arrays.fill(scores, "-");
 
-        if(homeScore == awayScore){
-            for(int i = 0 ; i < 4; i ++){
-                if(scores[i].equals("-")){
+        if (homeScore == awayScore) {
+            for (int i = 0; i < 4; i++) {
+                if (scores[i].equals("-")) {
                     scores[i] = i + ":" + i;
                 }
             }
-        }
-        else{
-            for(int i = 0 ; i < 4; i++){
+        } else {
+            for (int i = 0; i < 4; i++) {
                 int scoreOne = random.nextInt(5);
                 int scoreTwo = random.nextInt(5);
                 String tempScore = scoreOne + ":" + scoreTwo;
-                if(tempScore.equals(correctScore)) i--;
-                else if(i > 0){
-                    if(scores[i - 1].equals(tempScore)) i--;
+                if (tempScore.equals(correctScore)) i--;
+                else if (i > 0) {
+                    if (scores[i - 1].equals(tempScore)) i--;
                     else scores[i] = tempScore;
-                }
-                else scores[i] = tempScore;
+                } else scores[i] = tempScore;
             }
             scores[correctIndex] = correctScore;
         }
@@ -122,22 +120,22 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         holder.scoreThreeButton.setText(scores[2]);
         holder.scoreFourButton.setText(scores[3]);
 
-        holder.scoreOneButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button)view, buttons, position));
-        holder.scoreTwoButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button)view, buttons, position));
-        holder.scoreThreeButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button)view, buttons, position));
-        holder.scoreFourButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button)view, buttons, position));
+        holder.scoreOneButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));
+        holder.scoreTwoButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));
+        holder.scoreThreeButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));
+        holder.scoreFourButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  CardHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CardHolder holder, int position) {
         Event event = events.get(position);
         generateOptions(holder, event, position);
 
         holder.winnerCityDistanceTextView.setText("-----");
         Picasso.with(context).load(event.getHomeTeamLogo()).fit().into(holder.homeTeamLogo);
         Picasso.with(context).load(event.getAwayTeamLogo()).fit().into(holder.awayTeamLogo);
-        if(event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
-        else if(event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
+        if (event.getWinnerCode() == 1) findWinner(event.getHomeTeamId(), holder);
+        else if (event.getWinnerCode() == 2) findWinner(event.getAwayTeamId(), holder);
 
         holder.homeTeamTextView.setText(event.getHomeTeam());
         holder.awayTeamTextView.setText(event.getAwayTeam());

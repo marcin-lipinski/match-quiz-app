@@ -21,12 +21,13 @@ import java.util.ArrayList;
 public class SeasonActivity extends AppCompatActivity implements RecyclerViewInterface {
     @Inject
     LeaguesService leaguesService;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seasons);
-        try{
+        try {
             AppInjector.inject(this);
-        }catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             Log.d("NullPointerException", "Inject, but when there was no need.");
         }
 
@@ -40,11 +41,12 @@ public class SeasonActivity extends AppCompatActivity implements RecyclerViewInt
         leaguesService.getSeasonsByLeagueId(id, this, new VolleyCallback<ArrayList<Season>>() {
             @Override
             public void onSuccess(ArrayList<Season> seasons) {
-                ((TextView)findViewById(R.id.league_name)).setText(name);
+                ((TextView) findViewById(R.id.league_name)).setText(name);
                 RecyclerView recyclerView = findViewById(R.id.seasons_recycleview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(SeasonActivity.this));
                 recyclerView.setAdapter(new SeasonsRecycleViewAdapter(getApplicationContext(), seasons, SeasonActivity.this));
             }
+
             @Override
             public void onFail(String message) {
                 Log.d("Season by Id", message);

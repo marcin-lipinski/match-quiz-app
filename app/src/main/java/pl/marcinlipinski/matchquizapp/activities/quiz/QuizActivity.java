@@ -60,7 +60,7 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     Button returnButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         AppInjector.inject(this);
@@ -101,7 +101,8 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
 
     private void chooseEventsToQuiz(ArrayList<Event> result) {
         Set<Event> tempChosenEvents = new HashSet<>();
-        if(result.size()>= 10) while(tempChosenEvents.size() < 10) tempChosenEvents.add(result.get(random.nextInt(result.size())));
+        if (result.size() >= 10)
+            while (tempChosenEvents.size() < 10) tempChosenEvents.add(result.get(random.nextInt(result.size())));
         else tempChosenEvents.addAll(result);
 
         chosenEvents = new ArrayList<>(tempChosenEvents);
@@ -143,16 +144,20 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     }
 
     @Override
-    public void onCardDragging(Direction direction, float ratio) {}
+    public void onCardDragging(Direction direction, float ratio) {
+    }
 
     @Override
-    public void onCardSwiped(Direction direction) {}
+    public void onCardSwiped(Direction direction) {
+    }
 
     @Override
-    public void onCardRewound() {}
+    public void onCardRewound() {
+    }
 
     @Override
-    public void onCardCanceled() {}
+    public void onCardCanceled() {
+    }
 
     @Override
     public void onCardAppeared(View view, int position) {
@@ -161,27 +166,27 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     }
 
     @Override
-    public void onCardDisappeared(View view, int position) {}
+    public void onCardDisappeared(View view, int position) {
+    }
 
     @Override
     public void onButtonClick(Button button, Button[] buttons, int position) {
-        for(Button but : buttons) if(button != but)but.setClickable(false);
+        for (Button but : buttons) if (button != but) but.setClickable(false);
 
         String buttonText = String.valueOf(button.getText());
         Event event = chosenEvents.get(position);
         String correctString = event.getHomeTeamScore() + ":" + event.getAwayTeamScore();
 
-        if(correctString.equals(buttonText)) {
+        if (correctString.equals(buttonText)) {
             button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_green));
             score++;
-        }
-        else button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_red));
+        } else button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_red));
 
         cardStackView.postDelayed(() -> cardStackView.swipe(), 2000);
-        if(position == adapter.getItemCount() - 1) showScoreBoard();
+        if (position == adapter.getItemCount() - 1) showScoreBoard();
     }
 
-    public void showScoreBoard(){
+    public void showScoreBoard() {
         String scoreText = "Points: " + score + "/" + adapter.getItemCount();
         String leagueName = "League: " + ApproachService.getTemporaryApproach().getLeague();
         String seasonName = "Season: " + ApproachService.getTemporaryApproach().getSeason();
@@ -228,14 +233,14 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     public void rain() {
         EmitterConfig emitterConfig = new Emitter(score * 1000L + 500, TimeUnit.MILLISECONDS).perSecond(100);
         konfettiView.start(
-            new PartyFactory(emitterConfig)
-                .angle(Angle.TOP)
-                .spread(70)
-                .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
-                .colors(Arrays.asList(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
-                .setSpeedBetween(5f, 60f)
-                .position(new Position.Relative(0.0, 1.0).between(new Position.Relative(1.0, 1.0)))
-                .build()
+                new PartyFactory(emitterConfig)
+                        .angle(Angle.TOP)
+                        .spread(70)
+                        .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
+                        .colors(Arrays.asList(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
+                        .setSpeedBetween(5f, 60f)
+                        .position(new Position.Relative(0.0, 1.0).between(new Position.Relative(1.0, 1.0)))
+                        .build()
         );
     }
 }

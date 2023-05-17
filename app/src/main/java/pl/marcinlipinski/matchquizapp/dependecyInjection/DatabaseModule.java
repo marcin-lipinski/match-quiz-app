@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 @Module
 public class DatabaseModule {
     private final Context context;
+
     public DatabaseModule(Context context) {
         this.context = context;
     }

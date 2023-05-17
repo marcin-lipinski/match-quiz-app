@@ -16,11 +16,18 @@ import javax.inject.Singleton;
 @Component(modules = DatabaseModule.class)
 public interface AppComponent {
     void inject(MainActivity activity);
+
     void inject(SeasonActivity activity);
+
     void inject(QuizActivity activity);
+
     LeaguesService provideLeagueService();
+
     HistoryFragment provideHistoryFragment();
+
     PlayFragment providePlayFragment();
+
     ApproachService provideApproachService();
+
     EventService provideEventService();
 }

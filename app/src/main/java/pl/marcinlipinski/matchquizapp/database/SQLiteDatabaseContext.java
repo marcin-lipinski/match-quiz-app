@@ -16,21 +16,24 @@ public class SQLiteDatabaseContext extends SQLiteOpenHelper implements DatabaseC
     public SQLiteDatabaseContext(@Nullable Context context) {
         super(context, "matchquizdb", null, 1);
     }
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {}
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {}
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    }
 
     @Override
-    public void query(String query){
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    }
+
+    @Override
+    public void query(String query) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(query);
         db.close();
     }
 
     @Override
-    public void save(String tableName, ContentValues content){
+    public void save(String tableName, ContentValues content) {
         SQLiteDatabase db = getWritableDatabase();
         db.insert(tableName, null, content);
     }

@@ -10,7 +10,7 @@ import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     @Inject
     PlayFragment playFragment;
     @Inject
@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction().replace(R.id.container, playFragment).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.play) getSupportFragmentManager().beginTransaction().replace(R.id.container, playFragment).commit();
+            if (item.getItemId() == R.id.play)
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, playFragment).commit();
             else getSupportFragmentManager().beginTransaction().replace(R.id.container, historyFragment).commit();
             return true;
         });

@@ -40,10 +40,10 @@ public class LeaguesGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(layoutInflater == null) {
+        if (layoutInflater == null) {
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        if(view == null){
+        if (view == null) {
             view = layoutInflater.inflate(R.layout.cardview_league, null);
         }
 

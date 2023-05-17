@@ -10,18 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Approach;
+
 import java.util.ArrayList;
 
-public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecycleViewAdapter.ApproachHolder>{
+public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecycleViewAdapter.ApproachHolder> {
     static ArrayList<Approach> approaches;
     HistoryRecycleViewInterface recyclerViewInterface;
     Context context;
 
-    public HistoryRecycleViewAdapter(Context context, ArrayList<Approach> approaches, HistoryRecycleViewInterface recyclerViewInterface){
+    public HistoryRecycleViewAdapter(Context context, ArrayList<Approach> approaches, HistoryRecycleViewInterface recyclerViewInterface) {
         HistoryRecycleViewAdapter.approaches = approaches;
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
     }
+
     @NonNull
     @Override
     public HistoryRecycleViewAdapter.ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +38,8 @@ public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecyc
         holder.leagueNameTextView.setText(approach.getSeason());
         holder.appraochDateTextView.setText(approach.getApproachDate().toString());
         holder.approachScoreTextView.setText(approach.getScore() + "/10");
-        if(approach.getFavourite() == 1) holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
+        if (approach.getFavourite() == 1)
+            holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
         else holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_black_icon);
     }
 
@@ -48,6 +51,7 @@ public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecyc
     public static class ApproachHolder extends RecyclerView.ViewHolder {
         TextView leagueNameTextView, appraochDateTextView, approachScoreTextView;
         ImageButton isFavouriteButton, deleteButton;
+
         public ApproachHolder(@NonNull View itemView, HistoryRecycleViewInterface recyclerViewInterface) {
             super(itemView);
             leagueNameTextView = itemView.findViewById(R.id.league_name);
@@ -58,14 +62,14 @@ public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecyc
 
             isFavouriteButton.setOnClickListener(view -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     recyclerViewInterface.onFavouriteButtonClick(isFavouriteButton, position);
                 }
             });
 
             deleteButton.setOnClickListener(view -> {
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     recyclerViewInterface.onDeleteButtonClick(deleteButton, position);
                 }
             });

@@ -19,11 +19,12 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
     Context context;
     static ArrayList<Season> seasons;
 
-    public SeasonsRecycleViewAdapter(Context context, ArrayList<Season> seasons, RecyclerViewInterface recyclerViewInterface){
+    public SeasonsRecycleViewAdapter(Context context, ArrayList<Season> seasons, RecyclerViewInterface recyclerViewInterface) {
         SeasonsRecycleViewAdapter.seasons = seasons;
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
     }
+
     @NonNull
     @NotNull
     @Override
@@ -45,14 +46,15 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
 
     public static class SeasonHolder extends RecyclerView.ViewHolder {
         TextView seasonNameTextView;
+
         public SeasonHolder(@NonNull @NotNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             seasonNameTextView = itemView.findViewById(R.id.season_name);
             itemView.setOnClickListener(view ->
             {
-                if(recyclerViewInterface != null){
+                if (recyclerViewInterface != null) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
+                    if (position != RecyclerView.NO_POSITION) {
                         ApproachService.getTemporaryApproach().setSeason(seasons.get(position).getName());
                         recyclerViewInterface.onItemClick(seasons.get(position).getId());
                     }

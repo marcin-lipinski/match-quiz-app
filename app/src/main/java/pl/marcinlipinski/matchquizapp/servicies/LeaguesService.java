@@ -12,6 +12,7 @@ import org.json.JSONException;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.League;
 import pl.marcinlipinski.matchquizapp.models.Season;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +23,13 @@ public class LeaguesService implements Service<League> {
     DatabaseContext databaseContext;
 
     @Inject
-    public LeaguesService(DatabaseContext databaseContext){
+    public LeaguesService(DatabaseContext databaseContext) {
         this.databaseContext = databaseContext;
         this.initialize();
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         databaseContext.query("CREATE TABLE if not exists LEAGUE_TABLE (ID INTEGER PRIMARY KEY, NAME TEXT, LOGO TEXT)");
         databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 191L + "', " + "'Ekstraklasa'" + ", 'https://tipsscore.com/resb/league/poland-ekstraklasa.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 191L + ");");
         databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 251L + "', " + "'LaLiga'" + ", 'https://tipsscore.com/resb/league/spain-laliga.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 251L + ");");
@@ -41,23 +42,23 @@ public class LeaguesService implements Service<League> {
         databaseContext.query("INSERT INTO LEAGUE_TABLE (ID, NAME, LOGO) SELECT '" + 8911L + "', " + "'UEFA Europa Conference League'" + ", 'https://tipsscore.com/resb/league/europe-uefa-europa-conference-league.png' WHERE NOT EXISTS (SELECT 1 FROM LEAGUE_TABLE WHERE ID = " + 8911L + ");");
     }
 
-    public ArrayList<League> getAll(){
+    public ArrayList<League> getAll() {
         SQLiteDatabase db = databaseContext.read();
         Cursor cursor = db.rawQuery("SELECT * FROM LEAGUE_TABLE", null);
         ArrayList<League> leagues = new ArrayList<>();
-        if(cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 leagues.add(new League(
                         cursor.getLong(0),
                         cursor.getString(1),
                         cursor.getString(2)));
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         return leagues;
     }
 
-    public void getSeasonsByLeagueId(Long leagueId, Context context, final VolleyCallback volleyCallback){
+    public void getSeasonsByLeagueId(Long leagueId, Context context, final VolleyCallback volleyCallback) {
         String url = "https://sportscore1.p.rapidapi.com/leagues/" + leagueId + "/seasons";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
@@ -65,7 +66,7 @@ public class LeaguesService implements Service<League> {
                     try {
                         JSONArray json = response.getJSONArray("data");
                         ArrayList<Season> seasons = new ArrayList<>();
-                        for(int i = 0 ; i < json.length(); i++){
+                        for (int i = 0; i < json.length(); i++) {
                             Long id = json.getJSONObject(i).getLong("id");
                             String name = json.getJSONObject(i).getString("name");
                             Season season = Season.builder().name(name).id(id).build();
@@ -82,7 +83,7 @@ public class LeaguesService implements Service<League> {
         ) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String>  params = new HashMap<>();
+                Map<String, String> params = new HashMap<>();
                 params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
 
@@ -95,7 +96,7 @@ public class LeaguesService implements Service<League> {
     }
 
     @Override
-    public ContentValues newContent(League league){
+    public ContentValues newContent(League league) {
         ContentValues cv = new ContentValues();
         cv.put("ID", league.getId());
         cv.put("NAME", league.getName());

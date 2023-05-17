@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Approach;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,12 +26,13 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     static boolean ap = true;
 
     @Inject
-    public HistoryFragment(ApproachService approachService){
+    public HistoryFragment(ApproachService approachService) {
         this.approachService = approachService;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentHistory =  inflater.inflate(R.layout.fragment_history, container, false);
+        View fragmentHistory = inflater.inflate(R.layout.fragment_history, container, false);
 
         approaches = approachService.getAllApproaches();
 
@@ -44,10 +46,10 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     }
 
     public Comparator<Approach> approachSort = (approachA, approachB) -> {
-        if(approachA.getFavourite() > approachB.getFavourite()) return -1;
-        if(approachA.getFavourite() < approachB.getFavourite()) return 1;
-        if(approachA.getApproachDate().isAfter(approachB.getApproachDate())) return -1;
-        if(approachA.getApproachDate().isBefore(approachB.getApproachDate())) return 1;
+        if (approachA.getFavourite() > approachB.getFavourite()) return -1;
+        if (approachA.getFavourite() < approachB.getFavourite()) return 1;
+        if (approachA.getApproachDate().isAfter(approachB.getApproachDate())) return -1;
+        if (approachA.getApproachDate().isBefore(approachB.getApproachDate())) return 1;
         return 0;
     };
 
@@ -55,13 +57,12 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     public void onFavouriteButtonClick(ImageButton button, int approachPos) {
         Approach approach = approaches.get(approachPos);
 
-        if(approach.getFavourite() == 1){
+        if (approach.getFavourite() == 1) {
             approachService.setApproachFavourite(approach.getId(), 0);
             button.setImageResource(R.drawable.baseline_favorite_black_icon);
 
             approach.setFavourite(0);
-        }
-        else{
+        } else {
             approachService.setApproachFavourite(approach.getId(), 1);
             button.setImageResource(R.drawable.baseline_favorite_red_icon);
 
