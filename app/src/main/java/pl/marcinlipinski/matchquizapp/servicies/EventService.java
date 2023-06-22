@@ -2,7 +2,6 @@ package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
 import android.content.Context;
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -49,7 +48,7 @@ public class EventService implements Service<Event> {
         return cv;
     }
 
-    public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback volleyCallback) {
+    public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback<ArrayList<Event>> volleyCallback) {
         String url = "https://sportscore1.p.rapidapi.com/seasons/" + seasonId + "/events";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -81,9 +80,7 @@ public class EventService implements Service<Event> {
                         volleyCallback.onFail(e.getMessage());
                     }
                 },
-                error -> {
-                    volleyCallback.onFail(error.getMessage());
-                }
+                error -> volleyCallback.onFail(error.getMessage())
         ) {
             @Override
             public Map<String, String> getHeaders() {
@@ -99,7 +96,7 @@ public class EventService implements Service<Event> {
         queue.add(jsonObjectRequest);
     }
 
-    public void getCityDistanceByWinnerTeamId(Long teamId, Context context, VolleyCallback volleyCallback) {
+    public void getCityDistanceByWinnerTeamId(Long teamId, Context context, VolleyCallback<String> volleyCallback) {
         String url = "https://sportscore1.p.rapidapi.com/teams/" + teamId;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
@@ -107,18 +104,15 @@ public class EventService implements Service<Event> {
                     try {
                         JSONObject data = response.getJSONObject("data");
                         String city = data.getJSONObject("venue").getJSONObject("city").getString("en");
-
                         volleyCallback.onSuccess(city);
                     } catch (JSONException e) {
                         volleyCallback.onFail(e.getMessage());
                     }
                 },
-                error -> {
-                    volleyCallback.onFail(error.getMessage());
-                }
+                error -> volleyCallback.onFail(error.getMessage())
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
                 params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
                 params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
@@ -126,7 +120,6 @@ public class EventService implements Service<Event> {
                 return params;
             }
         };
-
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(jsonObjectRequest);
     }

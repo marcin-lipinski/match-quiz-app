@@ -1,5 +1,6 @@
 package pl.marcinlipinski.matchquizapp.activities.main.history;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
@@ -23,7 +24,6 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     LinearLayoutManager linearLayoutManager;
     HistoryRecycleViewAdapter approachesRecycleViewAdapter;
     static ArrayList<Approach> approaches;
-    static boolean ap = true;
 
     @Inject
     public HistoryFragment(ApproachService approachService) {
@@ -53,6 +53,7 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
         return 0;
     };
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onFavouriteButtonClick(ImageButton button, int approachPos) {
         Approach approach = approaches.get(approachPos);
@@ -72,6 +73,7 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
         approachesRecycleViewAdapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onDeleteButtonClick(ImageButton button, int approachPos) {
         approachService.deleteApproach(approaches.get(approachPos).getId());

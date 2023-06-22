@@ -35,9 +35,10 @@ public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecyc
     @Override
     public void onBindViewHolder(@NonNull HistoryRecycleViewAdapter.ApproachHolder holder, int position) {
         Approach approach = approaches.get(position);
+        String question = approach.getScore() + "/10";
         holder.leagueNameTextView.setText(approach.getSeason());
         holder.appraochDateTextView.setText(approach.getApproachDate().toString());
-        holder.approachScoreTextView.setText(approach.getScore() + "/10");
+        holder.approachScoreTextView.setText(question);
         if (approach.getFavourite() == 1)
             holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
         else holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_black_icon);
