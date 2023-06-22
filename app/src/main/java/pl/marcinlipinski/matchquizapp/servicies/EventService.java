@@ -8,6 +8,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.Event;
 
@@ -49,7 +50,7 @@ public class EventService implements Service<Event> {
     }
 
     public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback<ArrayList<Event>> volleyCallback) {
-        String url = "https://sportscore1.p.rapidapi.com/seasons/" + seasonId + "/events";
+        String url = context.getResources().getString(R.string.api_url) + "/seasons/" + seasonId + "/events";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
@@ -85,8 +86,8 @@ public class EventService implements Service<Event> {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
-                params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
+                params.put("X-RapidAPI-Key", context.getResources().getString(R.string.api_key));
+                params.put("X-RapidAPI-Host", context.getResources().getString(R.string.api_host_key));
 
                 return params;
             }

@@ -35,6 +35,7 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
         View fragmentHistory = inflater.inflate(R.layout.fragment_history, container, false);
 
         approaches = approachService.getAllApproaches();
+        approaches.sort(approachSort);
 
         recyclerView = fragmentHistory.findViewById(R.id.history_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());

@@ -91,34 +91,32 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         int awayScore = event.getAwayTeamScore();
         int correctIndex = random.nextInt(4);
         Button[] buttons = new Button[]{holder.scoreOneButton, holder.scoreTwoButton, holder.scoreThreeButton, holder.scoreFourButton};
-        String[] scores = new String[4];
+        List<String> scores = new ArrayList<>(Arrays.asList("-", "-", "-", "-"));
         String correctScore = homeScore + ":" + awayScore;
-        Arrays.fill(scores, "-");
 
+        scores.set(0, correctScore);
         if (homeScore == awayScore) {
-            for (int i = 0; i < 4; i++) {
-                if (scores[i].equals("-")) {
-                    scores[i] = i + ":" + i;
-                }
+            int goals = 0;
+            for (int i = 1; i < 4; i++) {
+                if (goals == homeScore) goals++;
+                scores.set(i, goals + ":" + goals);
+                goals++;
             }
         } else {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 1; i < 4; i++) {
                 int scoreOne = random.nextInt(5);
                 int scoreTwo = random.nextInt(5);
                 String tempScore = scoreOne + ":" + scoreTwo;
-                if (tempScore.equals(correctScore)) i--;
-                else if (i > 0) {
-                    if (scores[i - 1].equals(tempScore)) i--;
-                    else scores[i] = tempScore;
-                } else scores[i] = tempScore;
+                if (scores.contains(tempScore)) i--;
+                else scores.set(i, tempScore);
             }
-            scores[correctIndex] = correctScore;
         }
+        Collections.shuffle(scores, random);
 
-        holder.scoreOneButton.setText(scores[0]);
-        holder.scoreTwoButton.setText(scores[1]);
-        holder.scoreThreeButton.setText(scores[2]);
-        holder.scoreFourButton.setText(scores[3]);
+        holder.scoreOneButton.setText(scores.get(0));
+        holder.scoreTwoButton.setText(scores.get(1));
+        holder.scoreThreeButton.setText(scores.get(2));
+        holder.scoreFourButton.setText(scores.get(3));
 
         holder.scoreOneButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));
         holder.scoreTwoButton.setOnClickListener(view -> cardStackListener.onButtonClick((Button) view, buttons, position));

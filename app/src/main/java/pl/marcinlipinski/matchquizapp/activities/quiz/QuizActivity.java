@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -84,6 +85,10 @@ public class QuizActivity extends Activity implements VolleyCallback<ArrayList<E
     public void onSuccess(ArrayList<Event> result) {
         score = 0;
         chooseEventsToQuiz(result);
+        if(chosenEvents.size() < 10) {
+            Toast.makeText(this, "Not enough matches this season to start a quiz", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         manager = new CardStackLayoutManager(this, QuizActivity.this);
         manager.setStackFrom(StackFrom.Top);
