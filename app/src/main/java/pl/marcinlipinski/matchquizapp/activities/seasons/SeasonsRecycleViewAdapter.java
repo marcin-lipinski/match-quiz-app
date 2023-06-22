@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import org.jetbrains.annotations.NotNull;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Season;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
@@ -26,7 +25,6 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
     }
 
     @NonNull
-    @NotNull
     @Override
     public SeasonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -35,7 +33,7 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull SeasonHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SeasonHolder holder, int position) {
         holder.seasonNameTextView.setText(seasons.get(position).getName());
     }
 
@@ -47,7 +45,7 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
     public static class SeasonHolder extends RecyclerView.ViewHolder {
         TextView seasonNameTextView;
 
-        public SeasonHolder(@NonNull @NotNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public SeasonHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             seasonNameTextView = itemView.findViewById(R.id.season_name);
             itemView.setOnClickListener(view ->
@@ -61,7 +59,5 @@ public class SeasonsRecycleViewAdapter extends RecyclerView.Adapter<SeasonsRecyc
                 }
             });
         }
-
-
     }
 }

@@ -27,7 +27,8 @@ public class SeasonActivity extends AppCompatActivity implements RecyclerViewInt
         setContentView(R.layout.activity_seasons);
         try {
             AppInjector.inject(this);
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("leagueName");

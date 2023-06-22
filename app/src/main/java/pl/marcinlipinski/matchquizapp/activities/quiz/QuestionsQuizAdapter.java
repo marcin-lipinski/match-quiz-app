@@ -98,7 +98,7 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
         if (homeScore == awayScore) {
             int goals = 0;
             for (int i = 1; i < 4; i++) {
-                if (goals == homeScore) goals++;
+                if(goals == homeScore) goals++;
                 scores.set(i, goals + ":" + goals);
                 goals++;
             }

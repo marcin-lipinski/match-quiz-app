@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.lifecycle.ViewModelProvider;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.activities.seasons.SeasonActivity;
 import pl.marcinlipinski.matchquizapp.models.League;
@@ -15,15 +16,19 @@ import pl.marcinlipinski.matchquizapp.servicies.LeaguesService;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-
 public class PlayFragment extends Fragment {
-    @Inject
-    LeaguesService leaguesService;
-    ArrayList<League> leagues;
+    private final LeaguesService leaguesService;
+    private ArrayList<League> leagues;
 
     @Inject
     public PlayFragment(LeaguesService leaguesService) {
         this.leaguesService = leaguesService;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PlayViewModel playViewModel = new ViewModelProvider(requireActivity()).get(PlayViewModel.class);
     }
 
     @Override

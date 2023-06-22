@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.marcinlipinski.matchquizapp.R;
@@ -15,7 +16,6 @@ import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class HistoryFragment extends Fragment implements HistoryRecycleViewInterface {
     @Inject
@@ -23,7 +23,9 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     HistoryRecycleViewAdapter approachesRecycleViewAdapter;
-    static ArrayList<Approach> approaches;
+    ArrayList<Approach> approaches;
+
+    private HistoryViewModel historyViewModel;
 
     @Inject
     public HistoryFragment(ApproachService approachService) {
@@ -34,51 +36,50 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentHistory = inflater.inflate(R.layout.fragment_history, container, false);
 
-        approaches = approachService.getAllApproaches();
-        approaches.sort(approachSort);
-
         recyclerView = fragmentHistory.findViewById(R.id.history_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        approachesRecycleViewAdapter = new HistoryRecycleViewAdapter(getActivity(), approaches, this);
+        approachesRecycleViewAdapter = new HistoryRecycleViewAdapter(getActivity(), this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(approachesRecycleViewAdapter);
+
+        loadApproaches();
 
         return fragmentHistory;
     }
 
-    public Comparator<Approach> approachSort = (approachA, approachB) -> {
-        if (approachA.getFavourite() > approachB.getFavourite()) return -1;
-        if (approachA.getFavourite() < approachB.getFavourite()) return 1;
-        if (approachA.getApproachDate().isAfter(approachB.getApproachDate())) return -1;
-        if (approachA.getApproachDate().isBefore(approachB.getApproachDate())) return 1;
-        return 0;
-    };
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        historyViewModel = new ViewModelProvider(requireActivity()).get(HistoryViewModel.class);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void loadApproaches() {
+        approaches = approachService.getAllApproaches();
+        approaches.sort(historyViewModel.getApproachSort());
+        approachesRecycleViewAdapter.setApproaches(approaches);
+        approachesRecycleViewAdapter.notifyDataSetChanged();
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onFavouriteButtonClick(ImageButton button, int approachPos) {
         Approach approach = approaches.get(approachPos);
 
-        if (approach.getFavourite() == 1) {
-            approachService.setApproachFavourite(approach.getId(), 0);
-            button.setImageResource(R.drawable.baseline_favorite_black_icon);
+        int newFavouriteValue = (approach.getFavourite() == 1) ? 0 : 1;
+        approachService.setApproachFavourite(approach.getId(), newFavouriteValue);
 
-            approach.setFavourite(0);
-        } else {
-            approachService.setApproachFavourite(approach.getId(), 1);
-            button.setImageResource(R.drawable.baseline_favorite_red_icon);
-
-            approach.setFavourite(1);
-        }
-        approaches.sort(approachSort);
+        approach.setFavourite(newFavouriteValue);
+        approaches.sort(historyViewModel.getApproachSort());
         approachesRecycleViewAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onDeleteButtonClick(ImageButton button, int approachPos) {
-        approachService.deleteApproach(approaches.get(approachPos).getId());
-        HistoryRecycleViewAdapter.approaches.remove(approachPos);
+        Approach approach = approaches.get(approachPos);
+        approachService.deleteApproach(approach.getId());
+        approaches.remove(approach);
         approachesRecycleViewAdapter.notifyDataSetChanged();
     }
 }

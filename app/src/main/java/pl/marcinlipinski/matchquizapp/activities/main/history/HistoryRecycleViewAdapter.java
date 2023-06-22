@@ -14,34 +14,37 @@ import pl.marcinlipinski.matchquizapp.models.Approach;
 import java.util.ArrayList;
 
 public class HistoryRecycleViewAdapter extends RecyclerView.Adapter<HistoryRecycleViewAdapter.ApproachHolder> {
-    static ArrayList<Approach> approaches;
-    HistoryRecycleViewInterface recyclerViewInterface;
-    Context context;
+    private ArrayList<Approach> approaches;
+    private final HistoryRecycleViewInterface recyclerViewInterface;
+    private final Context context;
 
-    public HistoryRecycleViewAdapter(Context context, ArrayList<Approach> approaches, HistoryRecycleViewInterface recyclerViewInterface) {
-        HistoryRecycleViewAdapter.approaches = approaches;
-        this.recyclerViewInterface = recyclerViewInterface;
+    public HistoryRecycleViewAdapter(Context context, HistoryRecycleViewInterface recyclerViewInterface) {
         this.context = context;
+        this.recyclerViewInterface = recyclerViewInterface;
+        this.approaches = new ArrayList<>();
+    }
+
+    public void setApproaches(ArrayList<Approach> approaches) {
+        this.approaches = approaches;
     }
 
     @NonNull
     @Override
-    public HistoryRecycleViewAdapter.ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ApproachHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycleview_history, parent, false);
-        return new HistoryRecycleViewAdapter.ApproachHolder(view, recyclerViewInterface);
+        return new ApproachHolder(view, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HistoryRecycleViewAdapter.ApproachHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ApproachHolder holder, int position) {
         Approach approach = approaches.get(position);
         String question = approach.getScore() + "/10";
         holder.leagueNameTextView.setText(approach.getSeason());
         holder.appraochDateTextView.setText(approach.getApproachDate().toString());
         holder.approachScoreTextView.setText(question);
-        if (approach.getFavourite() == 1)
-            holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_red_icon);
-        else holder.isFavouriteButton.setImageResource(R.drawable.baseline_favorite_black_icon);
+        int favoriteIcon = (approach.getFavourite() == 1) ? R.drawable.baseline_favorite_red_icon : R.drawable.baseline_favorite_black_icon;
+        holder.isFavouriteButton.setImageResource(favoriteIcon);
     }
 
     @Override
