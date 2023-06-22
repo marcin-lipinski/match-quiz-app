@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 
 public class HistoryFragment extends Fragment implements HistoryRecycleViewInterface {
-    @Inject
+
     ApproachService approachService;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
@@ -26,6 +26,8 @@ public class HistoryFragment extends Fragment implements HistoryRecycleViewInter
     ArrayList<Approach> approaches;
 
     private HistoryViewModel historyViewModel;
+
+    public HistoryFragment(){}
 
     @Inject
     public HistoryFragment(ApproachService approachService) {
