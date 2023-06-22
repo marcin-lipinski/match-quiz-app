@@ -13,7 +13,7 @@ import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Season;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import pl.marcinlipinski.matchquizapp.servicies.LeaguesService;
-import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
+import pl.marcinlipinski.matchquizapp.servicies.RetrofitCallback;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SeasonActivity extends AppCompatActivity implements RecyclerViewInt
         ApproachService.resetTemporaryApproach();
         ApproachService.getTemporaryApproach().setLeague(name);
 
-        leaguesService.getSeasonsByLeagueId(id, this, new VolleyCallback<ArrayList<Season>>() {
+        leaguesService.getSeasonsByLeagueId(id, this, new RetrofitCallback<ArrayList<Season>>() {
             @Override
             public void onSuccess(ArrayList<Season> seasons) {
                 ((TextView) findViewById(R.id.league_name)).setText(name);

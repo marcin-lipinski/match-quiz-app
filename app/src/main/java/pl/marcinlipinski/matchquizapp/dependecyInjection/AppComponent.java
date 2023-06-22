@@ -10,6 +10,7 @@ import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
 import pl.marcinlipinski.matchquizapp.servicies.LeaguesService;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton

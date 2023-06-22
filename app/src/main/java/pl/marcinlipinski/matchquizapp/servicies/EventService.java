@@ -2,30 +2,29 @@ package pl.marcinlipinski.matchquizapp.servicies;
 
 import android.content.ContentValues;
 import android.content.Context;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
+import pl.marcinlipinski.matchquizapp.models.DTOs.EventDAO;
+import pl.marcinlipinski.matchquizapp.models.DTOs.TeamDTO;
 import pl.marcinlipinski.matchquizapp.models.Event;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EventService implements Service<Event> {
-    @Inject
+
     DatabaseContext databaseContext;
 
+    ApiService apiService;
+
     @Inject
-    public EventService(DatabaseContext databaseContext) {
+    public EventService(DatabaseContext databaseContext, ApiService apiService) {
         this.databaseContext = databaseContext;
+        this.apiService = apiService;
         this.initialize();
     }
 
@@ -49,79 +48,52 @@ public class EventService implements Service<Event> {
         return cv;
     }
 
-    public void getEventsBySeasonId(Long seasonId, Context context, VolleyCallback<ArrayList<Event>> volleyCallback) {
-        String url = context.getResources().getString(R.string.api_url) + "/seasons/" + seasonId + "/events";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public void getEventsBySeasonId(Long seasonId, Context context, RetrofitCallback<ArrayList<Event>> volleyCallback) {
+        String apiKey = context.getResources().getString(R.string.api_key);
+        String apiHost = context.getResources().getString(R.string.api_host_key);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
-                response -> {
-                    try {
-                        JSONArray json = response.getJSONArray("data");
-                        ArrayList<Event> events = new ArrayList<>();
-                        for (int i = 0; i < json.length(); i++) {
-                            JSONObject data = json.getJSONObject(i);
-                            if (!data.getString("status").equals("finished")) continue;
-                            Event event = Event.builder()
-                                    .id(data.getLong("id"))
-                                    .homeTeamId(data.getJSONObject("home_team").getLong("id"))
-                                    .awayTeamId(data.getJSONObject("away_team").getLong("id"))
-                                    .homeTeam(data.getJSONObject("home_team").getString("name_full"))
-                                    .awayTeam(data.getJSONObject("away_team").getString("name_full"))
-                                    .homeTeamLogo(data.getJSONObject("home_team").getString("logo"))
-                                    .awayTeamLogo(data.getJSONObject("away_team").getString("logo"))
-                                    .homeTeamScore(data.getJSONObject("home_score").getInt("normal_time"))
-                                    .awayTeamScore(data.getJSONObject("away_score").getInt("normal_time"))
-                                    .winnerCode(data.getInt("winner_code"))
-                                    .startTime(LocalDate.parse(data.getString("start_at"), formatter)).build();
-
-                            events.add(event);
-                        }
-                        volleyCallback.onSuccess(events);
-                    } catch (JSONException e) {
-                        volleyCallback.onFail(e.getMessage());
-                    }
-                },
-                error -> volleyCallback.onFail(error.getMessage())
-        ) {
+        apiService.getEventsBySeasonId(seasonId, apiKey, apiHost).enqueue(new Callback<ApiResponse<ArrayList<EventDAO>>>() {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-RapidAPI-Key", context.getResources().getString(R.string.api_key));
-                params.put("X-RapidAPI-Host", context.getResources().getString(R.string.api_host_key));
-
-                return params;
+            public void onResponse(@NotNull Call<ApiResponse<ArrayList<EventDAO>>> call, @NotNull Response<ApiResponse<ArrayList<EventDAO>>> response) {
+                if (!response.isSuccessful()) volleyCallback.onFail(response.message());
+                try {
+                    assert response.body() != null;
+                    ArrayList<Event> events = new ArrayList<>();
+                    for (EventDAO ev : response.body().data) {
+                        if (ev.status.equals("finished")) events.add(ev.getEvent());
+                    }
+                    volleyCallback.onSuccess(events);
+                } catch (Exception e) {
+                    volleyCallback.onFail(e.getMessage());
+                }
             }
-        };
 
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(jsonObjectRequest);
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<ArrayList<EventDAO>>> call, @NotNull Throwable throwable) {
+                volleyCallback.onFail(throwable.getMessage());
+            }
+        });
     }
 
-    public void getCityDistanceByWinnerTeamId(Long teamId, Context context, VolleyCallback<String> volleyCallback) {
-        String url = "https://sportscore1.p.rapidapi.com/teams/" + teamId;
+    public void getCityDistanceByWinnerTeamId(Long teamId, Context context, RetrofitCallback<String> volleyCallback) {
+        String apiKey = context.getResources().getString(R.string.api_key);
+        String apiHost = context.getResources().getString(R.string.api_host_key);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
-                response -> {
-                    try {
-                        JSONObject data = response.getJSONObject("data");
-                        String city = data.getJSONObject("venue").getJSONObject("city").getString("en");
-                        volleyCallback.onSuccess(city);
-                    } catch (JSONException e) {
-                        volleyCallback.onFail(e.getMessage());
-                    }
-                },
-                error -> volleyCallback.onFail(error.getMessage())
-        ) {
+        apiService.getCityOfTeam(teamId, apiKey, apiHost).enqueue(new Callback<ApiResponse<TeamDTO>>() {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "5087cf9cb7mshe93bc99293ba390p127156jsnc0c58e47f3f4");
-                params.put("X-RapidAPI-Host", "sportscore1.p.rapidapi.com");
-
-                return params;
+            public void onResponse(@NotNull Call<ApiResponse<TeamDTO>> call, @NotNull Response<ApiResponse<TeamDTO>> response) {
+                if (!response.isSuccessful()) volleyCallback.onFail(response.message());
+                try {
+                    volleyCallback.onSuccess(response.body().data.getCity());
+                } catch (Exception e) {
+                    volleyCallback.onFail(e.getMessage());
+                }
             }
-        };
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(jsonObjectRequest);
+
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<TeamDTO>> call, @NotNull Throwable throwable) {
+                volleyCallback.onFail(throwable.getMessage());
+            }
+        });
     }
 }

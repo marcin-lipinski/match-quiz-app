@@ -4,28 +4,27 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.jetbrains.annotations.NotNull;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.database.DatabaseContext;
 import pl.marcinlipinski.matchquizapp.models.League;
 import pl.marcinlipinski.matchquizapp.models.Season;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LeaguesService implements Service<League> {
-    @Inject
+
     DatabaseContext databaseContext;
+    ApiService apiService;
 
     @Inject
-    public LeaguesService(DatabaseContext databaseContext) {
+    public LeaguesService(DatabaseContext databaseContext, ApiService apiService) {
         this.databaseContext = databaseContext;
+        this.apiService = apiService;
         this.initialize();
     }
 
@@ -59,39 +58,26 @@ public class LeaguesService implements Service<League> {
         return leagues;
     }
 
-    public void getSeasonsByLeagueId(Long leagueId, Context context, final VolleyCallback<ArrayList<Season>> volleyCallback) {
-        String url = context.getResources().getString(R.string.api_url) + "/leagues/" + leagueId + "/seasons";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null,
-                response -> {
-                    try {
-                        JSONArray json = response.getJSONArray("data");
-                        ArrayList<Season> seasons = new ArrayList<>();
-                        for (int i = 0; i < json.length(); i++) {
-                            Long id = json.getJSONObject(i).getLong("id");
-                            String name = json.getJSONObject(i).getString("name");
-                            Season season = Season.builder().name(name).id(id).build();
-                            seasons.add(season);
-                        }
-                        volleyCallback.onSuccess(seasons);
-                    } catch (JSONException e) {
-                        volleyCallback.onFail(e.getMessage());
-                    }
-                },
-                error -> volleyCallback.onFail(error.getMessage())
-        ) {
+    public void getSeasonsByLeagueId(Long leagueId, Context context, final RetrofitCallback<ArrayList<Season>> volleyCallback) {
+        String apiKey = context.getResources().getString(R.string.api_key);
+        String apiHost = context.getResources().getString(R.string.api_host_key);
+        apiService.getSeasonsByLeagueId(leagueId, apiKey, apiHost).enqueue(new Callback<ApiResponse<ArrayList<Season>>>() {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-RapidAPI-Key", context.getResources().getString(R.string.api_key));
-                params.put("X-RapidAPI-Host", context.getResources().getString(R.string.api_host_key));
-
-                return params;
+            public void onResponse(@NotNull Call<ApiResponse<ArrayList<Season>>> call, @NotNull Response<ApiResponse<ArrayList<Season>>> response) {
+                if (!response.isSuccessful()) volleyCallback.onFail(response.message());
+                try {
+                    assert response.body() != null;
+                    volleyCallback.onSuccess(response.body().data);
+                } catch (Exception e) {
+                    volleyCallback.onFail(e.getMessage());
+                }
             }
-        };
 
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(jsonObjectRequest);
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<ArrayList<Season>>> call, @NotNull Throwable throwable) {
+                volleyCallback.onFail(throwable.getMessage());
+            }
+        });
     }
 
     @Override

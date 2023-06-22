@@ -30,7 +30,7 @@ import pl.marcinlipinski.matchquizapp.dependecyInjection.AppInjector;
 import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.ApproachService;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
-import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
+import pl.marcinlipinski.matchquizapp.servicies.RetrofitCallback;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 import javax.inject.Inject;
@@ -38,7 +38,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class QuizActivity extends Activity implements VolleyCallback<ArrayList<Event>>, LocationListener, CustomCardStackListener {
+public class QuizActivity extends Activity implements RetrofitCallback<ArrayList<Event>>, LocationListener, CustomCardStackListener {
     @Inject
     EventService eventService;
     @Inject

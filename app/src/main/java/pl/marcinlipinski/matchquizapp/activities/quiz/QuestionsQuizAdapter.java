@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import pl.marcinlipinski.matchquizapp.R;
 import pl.marcinlipinski.matchquizapp.models.Event;
 import pl.marcinlipinski.matchquizapp.servicies.EventService;
-import pl.marcinlipinski.matchquizapp.servicies.VolleyCallback;
+import pl.marcinlipinski.matchquizapp.servicies.RetrofitCallback;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -73,7 +73,7 @@ public class QuestionsQuizAdapter extends RecyclerView.Adapter<QuestionsQuizAdap
     }
 
     public void findWinner(Long winnerId, CardHolder holder) {
-        eventService.getCityDistanceByWinnerTeamId(winnerId, context, new VolleyCallback<String>() {
+        eventService.getCityDistanceByWinnerTeamId(winnerId, context, new RetrofitCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 holder.winnerCityDistanceTextView.setText(String.valueOf(findDistanceToCity(result)));

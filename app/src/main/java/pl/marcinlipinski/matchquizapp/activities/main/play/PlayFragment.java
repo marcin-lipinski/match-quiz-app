@@ -17,8 +17,10 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 
 public class PlayFragment extends Fragment {
-    private final LeaguesService leaguesService;
+    private LeaguesService leaguesService;
     private ArrayList<League> leagues;
+
+    public PlayFragment(){}
 
     @Inject
     public PlayFragment(LeaguesService leaguesService) {
